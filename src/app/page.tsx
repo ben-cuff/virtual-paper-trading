@@ -1,5 +1,10 @@
-export default function Home() {
+import Login from "@/components/login";
+
+export  default function Home() {
 	return (
-		<div>Home page</div>
+		<div>
+			<div>Home page</div>
+			<Login />
+		</div>
 	);
 }
