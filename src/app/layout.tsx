@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import ClientProvider from "@/components/sessionProvider";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
 	title: "Paper Trading",
