@@ -21,7 +21,7 @@ export default function Home() {
 						Your cash available to trade is {session.user?.balance}
 					</div>
 
-					<Transact id={session.user.id} />
+					<Transact id={session.user.id as number} />
 				</>
 			) : (
 				<></>
