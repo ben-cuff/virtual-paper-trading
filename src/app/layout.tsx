@@ -1,3 +1,4 @@
+import ClientProvider from "@/components/sessionProvider";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,7 +13,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body>{children}</body>
+			<body>
+				<ClientProvider>{children}</ClientProvider>
+			</body>
 		</html>
 	);
 }
