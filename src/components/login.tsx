@@ -11,7 +11,6 @@ export default function Login() {
 			</div>
 		);
 	} else {
-		console.log("Session found:", JSON.stringify(session, null, 2));
 		return (
 			<div className="">
 				<button onClick={() => signOut()}>

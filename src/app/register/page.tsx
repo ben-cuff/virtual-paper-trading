@@ -16,7 +16,7 @@ export default function Register() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		console.log(name, email, password);
