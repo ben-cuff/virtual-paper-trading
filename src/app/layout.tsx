@@ -1,4 +1,4 @@
-import ClientProvider from "@/components/sessionProvider";
+import ClientProvider from "@/components/session-provider";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

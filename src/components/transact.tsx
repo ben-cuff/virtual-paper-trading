@@ -1,21 +1,41 @@
+import buyStock from "@/app/util/buy-stock";
+import getStockPrice from "@/app/util/get-stock-data";
+import { reloadSession } from "@/app/util/reload-session";
+import sellStock from "@/app/util/sell-stock";
 import { useState } from "react";
 
 export default function Transact({ id }: { id: number }) {
 	const [stockSymbol, setStockSymbol] = useState("");
-	const [transactionType, setTransactionType] = useState("Buy");
-	const [shares, setShares] = useState(0);
-	const [dollars, setDollars] = useState(0);
+	const [transactionType, setTransactionType] = useState("buy");
+	const [shares, setShares] = useState();
+	const [dollars, setDollars] = useState();
 	const [toggle, setToggle] = useState("shares");
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log({
-			id,
-			stockSymbol,
-			transactionType,
-			shares: toggle === "shares" ? shares : undefined,
-			dollars: toggle === "dollars" ? dollars : undefined,
-		});
+
+		const stockData = await getStockPrice(stockSymbol);
+
+		const price = Number(stockData.last);
+
+		const quantity: number = toggle === "shares" ? (shares ?? 0) : (dollars ?? 0) / Number(price);
+
+		let data;
+
+		if (transactionType === "buy") {
+			data = await buyStock(id, stockSymbol, quantity, Number(price.toFixed(2)));
+		} else {
+			data = await sellStock(id, stockSymbol, quantity, Number(price.toFixed(2)));
+		}
+
+		if (data.detail) {
+			alert(data.detail);
+			return;
+		}
+
+		console.log(JSON.stringify(data, null, 2));
+
+		reloadSession();
 	};
 
 	return (
@@ -69,7 +89,10 @@ export default function Transact({ id }: { id: number }) {
 						<input
 							type="number"
 							value={shares}
-							onChange={(e) => setShares(Number(e.target.value))}
+							onChange={(e) => {
+								setDollars(Number(e.target.value));
+								setShares(Number(e.target.value));
+							}}
 						/>
 					</label>
 				</div>
@@ -80,7 +103,10 @@ export default function Transact({ id }: { id: number }) {
 						<input
 							type="number"
 							value={dollars}
-							onChange={(e) => setDollars(Number(e.target.value))}
+							onChange={(e) => {
+								setDollars(Number(e.target.value));
+								setShares(Number(e.target.value));
+							}}
 						/>
 					</label>
 				</div>

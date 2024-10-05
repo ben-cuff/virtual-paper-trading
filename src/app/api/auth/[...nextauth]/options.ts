@@ -1,3 +1,4 @@
+import getBalance from "@/app/util/get-balance";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -60,10 +61,11 @@ export const authOptions: NextAuthOptions = {
 		},
 		async session({ session, token }) {
 			if (session.user) {
+				const balance = await getBalance(token.id as number);
 				session.user.id = token.id as number;
 				session.user.name = token.name;
 				session.user.email = token.email;
-				session.user.balance = token.balance as number;
+				session.user.balance = balance;
 			}
 			return session;
 		},
