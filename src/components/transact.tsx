@@ -7,8 +7,8 @@ import { useState } from "react";
 export default function Transact({ id }: { id: number }) {
 	const [stockSymbol, setStockSymbol] = useState("");
 	const [transactionType, setTransactionType] = useState("buy");
-	const [shares, setShares] = useState();
-	const [dollars, setDollars] = useState();
+	const [shares, setShares] = useState<number | undefined>(undefined);
+	const [dollars, setDollars] = useState<number | undefined>(undefined);
 	const [toggle, setToggle] = useState("shares");
 
 	const handleSubmit = async (e: React.FormEvent) => {
