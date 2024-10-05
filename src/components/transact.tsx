@@ -37,8 +37,6 @@ export default function Transact({ id }: { id: number }) {
 			return;
 		}
 
-		console.log(JSON.stringify(data, null, 2));
-
 		reloadSession();
 	};
 
