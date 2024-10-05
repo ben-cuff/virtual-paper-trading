@@ -3,7 +3,6 @@
 import Login from "@/components/login";
 import Transact from "@/components/transact";
 import { useSession } from "next-auth/react";
-import getBalance from "./util/get-balance";
 
 export default function Home() {
 	const { data: session, status } = useSession();
