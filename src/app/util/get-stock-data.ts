@@ -1,4 +1,4 @@
-export default async function getStockPrice(symbol: string) {
+export default async function getStockData(symbol: string) {
 	const response = await fetch(
 		`https://api.marketdata.app/v1/stocks/quotes/${symbol}/`,
 		{
@@ -6,7 +6,7 @@ export default async function getStockPrice(symbol: string) {
 			redirect: "follow",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.MARKETDATA_API_TOKEN}}`,
+				Authorization: `Bearer ${process.env.MARKETDATA_API_TOKEN}`,
 			},
 		}
 	);

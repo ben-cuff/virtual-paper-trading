@@ -1,7 +1,8 @@
 import buyStock from "@/app/util/buy-stock";
-import getStockPrice from "@/app/util/get-stock-data";
+import getStockData from "@/app/util/get-stock-data";
 import { reloadSession } from "@/app/util/reload-session";
 import sellStock from "@/app/util/sell-stock";
+import StockInput from "./stock-input";
 import { useState } from "react";
 
 export default function Transact({ id }: { id: number }) {
@@ -10,11 +11,14 @@ export default function Transact({ id }: { id: number }) {
 	const [shares, setShares] = useState(0);
 	const [dollars, setDollars] = useState(0);
 	const [toggle, setToggle] = useState("shares");
+	const [stockDataToggle, setStockDataToggle] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		const stockData = await getStockPrice(stockSymbol);
+		const stockData = await getStockData(stockSymbol);
+
+		console.log(JSON.stringify(stockData,null,2))
 
 		const price = Number(stockData.last);
 
@@ -47,8 +51,18 @@ export default function Transact({ id }: { id: number }) {
 						type="text"
 						value={stockSymbol}
 						onChange={(e) => setStockSymbol(e.target.value)}
+						onBlur={async () => {
+							if (stockSymbol) {
+								setStockDataToggle(true);
+							} else {
+								setStockDataToggle(false);
+							}
+						}}
 					/>
 				</label>
+				{stockDataToggle && (
+					<StockInput stockSymbol={stockSymbol} />
+				)}
 			</div>
 			<div>
 				<label>
