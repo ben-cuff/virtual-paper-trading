@@ -1,9 +1,9 @@
 import buyStock from "@/app/util/buy-stock";
-import getStockData from "@/app/util/get-stock-data";
+import { fetchData } from "@/app/util/fetch-data";
 import { reloadSession } from "@/app/util/reload-session";
 import sellStock from "@/app/util/sell-stock";
-import StockInput from "./stock-input";
 import { useState } from "react";
+import StockInput from "./stock-input";
 
 export default function Transact({ id }: { id: number }) {
 	const [stockSymbol, setStockSymbol] = useState("");
@@ -35,12 +35,9 @@ export default function Transact({ id }: { id: number }) {
 		let stockData;
 
 		try {
-			const response = await fetch(`api/stocks/getStockData?symbol=${stockSymbol}`);
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			stockData = await response.json();
-			console.log(JSON.stringify(stockData, null, 2));
+			stockData = fetchData(
+				`api/stocks/getStockData?symbol=${stockSymbol}`
+			);
 		} catch (error) {
 			console.error("Error fetching stock data:", error);
 			alert("Failed to fetch stock data. Please try again.");
@@ -51,14 +48,25 @@ export default function Transact({ id }: { id: number }) {
 
 		const price = Number(stockData.last);
 
-		const quantity: number = toggle === "shares" ? (shares ?? 0) : (dollars ?? 0) / Number(price);
+		const quantity: number =
+			toggle === "shares" ? shares ?? 0 : (dollars ?? 0) / Number(price);
 
 		let data;
 
 		if (transactionType === "buy") {
-			data = await buyStock(id, stockSymbol, quantity, Number(price.toFixed(2)));
+			data = await buyStock(
+				id,
+				stockSymbol,
+				quantity,
+				Number(price.toFixed(2))
+			);
 		} else {
-			data = await sellStock(id, stockSymbol, quantity, Number(price.toFixed(2)));
+			data = await sellStock(
+				id,
+				stockSymbol,
+				quantity,
+				Number(price.toFixed(2))
+			);
 		}
 
 		if (data.detail) {
@@ -95,7 +103,9 @@ export default function Transact({ id }: { id: number }) {
 							Transaction Type:
 							<select
 								value={transactionType}
-								onChange={(e) => setTransactionType(e.target.value)}
+								onChange={(e) =>
+									setTransactionType(e.target.value)
+								}
 							>
 								<option value="buy">Buy</option>
 								<option value="sell">Sell</option>
