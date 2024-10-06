@@ -2,6 +2,7 @@
 
 import getPortfolio from "@/util/get-portfolio";
 import { useEffect, useState } from "react";
+import { fetchData } from "@/util/fetch-data";
 
 export default function Portfolio({ id }: { id: number }) {
 	interface User {
@@ -12,7 +13,8 @@ export default function Portfolio({ id }: { id: number }) {
 	interface Stock {
 		stock_symbol: string;
 		shares_owned: number;
-		average_price: number;
+        average_price: number;
+        current_price: number;
 	}
 
 	interface PortfolioData {
@@ -42,7 +44,7 @@ export default function Portfolio({ id }: { id: number }) {
 				<>
 					<h2>User Information</h2>
 					<p>Name: {data.user.name}</p>
-					<p>Balance: ${data.user.balance}</p>
+					<p>Cash available to trade: ${data.user.balance}</p>
 					<h2>Portfolio</h2>
 					<ul>
 						{data.portfolio.map((stock: Stock, index: number) => (
@@ -62,14 +64,15 @@ export default function Portfolio({ id }: { id: number }) {
 					<h2>Total Portfolio Value</h2>
 					<p>
 						$
-						{data.portfolio
-							.reduce(
+						{(
+							data.user.balance +
+							data.portfolio.reduce(
 								(acc, stock) =>
 									acc +
 									stock.shares_owned * stock.average_price,
 								0
 							)
-							.toFixed(2) + data.user.balance.toFixed(2)}
+						).toFixed(2)}
 					</p>
 				</>
 			)}
