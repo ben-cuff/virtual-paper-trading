@@ -3,7 +3,6 @@
 import buyStock from "@/util/buy-stock";
 import { fetchData } from "@/util/fetch-data";
 import sellStock from "@/util/sell-stock";
-import Router from "next/router";
 import { useState } from "react";
 import StockInput from "./stock-input";
 
@@ -30,7 +29,6 @@ export default function Transact({ id }: { id: number }) {
 		e.preventDefault();
 
 		if (!stockSymbol || !transactionType || (!shares && !dollars)) {
-			alert("Please fill in all fields.");
 			return;
 		}
 
@@ -77,8 +75,6 @@ export default function Transact({ id }: { id: number }) {
 
 		window.location.href = "/";
 	};
-
-	
 
 	return (
 		<>
