@@ -18,7 +18,7 @@ export default function Home() {
 				<>
 					<div>Welcome, {session.user?.name}</div>
 					<div>
-						Your cash available to trade is {session.user?.balance}
+						Your cash available to trade is {session.user?.balance?.toFixed(2)}
 					</div>
 
 					<Transact id={session.user.id as number} />

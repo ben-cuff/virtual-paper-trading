@@ -13,6 +13,17 @@ export default function Transact({ id }: { id: number }) {
 	const [toggle, setToggle] = useState("shares");
 	const [stockDataToggle, setStockDataToggle] = useState(false);
 
+	const handleStockSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		if (!stockSymbol.trim()) {
+			alert("Please enter a stock symbol.");
+			return;
+		}
+
+		setStockDataToggle(true);
+	};
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -23,7 +34,7 @@ export default function Transact({ id }: { id: number }) {
 
 		const stockData = await getStockData(stockSymbol);
 
-		console.log(JSON.stringify(stockData,null,2))
+		console.log(JSON.stringify(stockData, null, 2));
 
 		const price = Number(stockData.last);
 
@@ -46,89 +57,90 @@ export default function Transact({ id }: { id: number }) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<div>
-				<label>
-					Stock Symbol:
-					<input
-						type="text"
-						value={stockSymbol}
-						onChange={(e) => setStockSymbol(e.target.value)}
-						onBlur={async () => {
-							if (stockSymbol) {
-								setStockDataToggle(true);
-							} else {
+		<>
+			<form onSubmit={handleStockSubmit}>
+				<div>
+					<label>
+						Stock Symbol:
+						<input
+							type="text"
+							value={stockSymbol}
+							onChange={(e) => {
+								setStockSymbol(e.target.value);
 								setStockDataToggle(false);
-							}
-						}}
-					/>
-				</label>
-				{stockDataToggle && (
+							}}
+						/>
+					</label>
+					<button type="submit">Submit Stock Symbol</button>
+				</div>
+			</form>
+			{stockDataToggle && (
+				<form onSubmit={handleSubmit}>
 					<StockInput stockSymbol={stockSymbol} />
-				)}
-			</div>
-			<div>
-				<label>
-					Transaction Type:
-					<select
-						value={transactionType}
-						onChange={(e) => setTransactionType(e.target.value)}
-					>
-						<option value="buy">Buy</option>
-						<option value="sell">Sell</option>
-					</select>
-				</label>
-			</div>
-			<div>
-				<label>
-					<input
-						type="radio"
-						value="shares"
-						checked={toggle === "shares"}
-						onChange={() => setToggle("shares")}
-					/>
-					Shares
-				</label>
-				<label>
-					<input
-						type="radio"
-						value="dollars"
-						checked={toggle === "dollars"}
-						onChange={() => setToggle("dollars")}
-					/>
-					Dollars
-				</label>
-			</div>
-			{toggle === "shares" ? (
-				<div>
-					<label>
-						Shares:
-						<input
-							type="number"
-							value={shares}
-							onChange={(e) => {
-								setDollars(Number(e.target.value));
-								setShares(Number(e.target.value));
-							}}
-						/>
-					</label>
-				</div>
-			) : (
-				<div>
-					<label>
-						Dollars:
-						<input
-							type="number"
-							value={dollars}
-							onChange={(e) => {
-								setDollars(Number(e.target.value));
-								setShares(Number(e.target.value));
-							}}
-						/>
-					</label>
-				</div>
+					<div>
+						<label>
+							Transaction Type:
+							<select
+								value={transactionType}
+								onChange={(e) => setTransactionType(e.target.value)}
+							>
+								<option value="buy">Buy</option>
+								<option value="sell">Sell</option>
+							</select>
+						</label>
+					</div>
+					<div>
+						<label>
+							<input
+								type="radio"
+								value="shares"
+								checked={toggle === "shares"}
+								onChange={() => setToggle("shares")}
+							/>
+							Shares
+						</label>
+						<label>
+							<input
+								type="radio"
+								value="dollars"
+								checked={toggle === "dollars"}
+								onChange={() => setToggle("dollars")}
+							/>
+							Dollars
+						</label>
+					</div>
+					{toggle === "shares" ? (
+						<div>
+							<label>
+								Shares:
+								<input
+									type="number"
+									value={shares}
+									onChange={(e) => {
+										setDollars(Number(e.target.value));
+										setShares(Number(e.target.value));
+									}}
+								/>
+							</label>
+						</div>
+					) : (
+						<div>
+							<label>
+								Dollars:
+								<input
+									type="number"
+									value={dollars}
+									onChange={(e) => {
+										setDollars(Number(e.target.value));
+										setShares(Number(e.target.value));
+									}}
+								/>
+							</label>
+						</div>
+					)}
+					<button type="submit">Submit</button>
+				</form>
 			)}
-			<button type="submit">Submit</button>
-		</form>
+		</>
 	);
 }

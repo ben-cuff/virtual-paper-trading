@@ -1,17 +1,39 @@
-import getCandle from "@/app/util/get-candle";
-import getStockData from "@/app/util/get-stock-data";
 import { useEffect, useState } from "react";
 
 const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
-	const [data, setData] = useState<any>(null);
-	const [error, setError] = useState<Error | null>(null);
+	interface StockData {
+		o: number;
+		curPrice: number;
+	}
+
+	const [data, setData] = useState<StockData | null>(null);
 
 	useEffect(() => {
 		const fetchStockPrice = async (date: string) => {
 			try {
 				const [stockData, response] = await Promise.all([
-					getCandle(stockSymbol, "D", date, date),
-					getStockData(stockSymbol),
+					(async () => {
+						const response = await fetch(
+							`api/stocks/getCandle?symbol=${stockSymbol}&resolution=D&from=${date}&to=${date}`
+						);
+						if (!response.ok) {
+							throw new Error(
+								`HTTP error! status: ${response.status}`
+							);
+						}
+						return response.json();
+					})(),
+					(async () => {
+						const response = await fetch(
+							`api/stocks/getStockData?symbol=${stockSymbol}`
+						);
+						if (!response.ok) {
+							throw new Error(
+								`HTTP error! status: ${response.status}`
+							);
+						}
+						return response.json();
+					})(),
 				]);
 
 				if (stockData.s === "no_data") {
@@ -37,12 +59,8 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 
 				console.log(JSON.stringify(stockData, null, 2));
 				setData(stockData);
-			} catch (err: unknown) {
-				if (err instanceof Error) {
-					setError(err);
-				} else {
-					setError(new Error("An unknown error occurred"));
-				}
+			} catch (err) {
+				console.error(err);
 			}
 		};
 
@@ -51,19 +69,13 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 			fetchStockPrice(today);
 		};
 
-		// Reset error state when stockSymbol changes
-		setError(null);
 		setData(null);
 
 		fetchStockPriceInitial();
 	}, [stockSymbol]);
 
-	if (error) {
-		return <div>Error fetching stock data: {error.message}</div>;
-	}
-
 	if (!data) {
-		return <div>Loading...</div>;
+		return;
 	}
 
 	const openingPrice = data.o;
@@ -79,7 +91,7 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 					className={
 						curPrice - openingPrice < 0
 							? "text-red-500"
-							: "text-black"
+							: "text-green-500"
 					}
 				>
 					{(((curPrice - openingPrice) / openingPrice) * 100).toFixed(

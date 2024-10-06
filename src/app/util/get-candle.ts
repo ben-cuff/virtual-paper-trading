@@ -5,18 +5,14 @@ export default async function getCandle(
 	to: string
 ) {
 	const response = await fetch(
-		`https://api.marketdata.app/v1/stocks/candles/${resolution}/${symbol}?from=${from}&to=${to}`,
-		{
-			method: "GET",
-			redirect: "follow",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.MARKETDATA_API_TOKEN}`,
-			},
-		}
-    );
-    
-    const data = await response.json();
+		`api/stocks/getCandle?symbol=${symbol}&resolution=${resolution}&from=${from}&to=${to}`
+	);
 
-    return data;
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+
+	const data = await response.json();
+
+	return data;
 }

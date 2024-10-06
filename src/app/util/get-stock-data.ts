@@ -1,15 +1,11 @@
 export default async function getStockData(symbol: string) {
 	const response = await fetch(
-		`https://api.marketdata.app/v1/stocks/quotes/${symbol}/`,
-		{
-			method: "GET",
-			redirect: "follow",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.MARKETDATA_API_TOKEN}`,
-			},
-		}
+		`api/stocks/getStockData?symbol=${symbol}`
 	);
+
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
 
 	const data = await response.json();
 
