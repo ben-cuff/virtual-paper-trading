@@ -17,6 +17,16 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 				if (stockData.s === "no_data") {
 					const previousDate = new Date(date);
 					previousDate.setDate(previousDate.getDate() - 1);
+
+					const fiveDaysAgo = new Date();
+					fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+
+					if (previousDate < fiveDaysAgo) {
+						throw new Error(
+							"No valid stock data found for the past 5 days"
+						);
+					}
+
 					return fetchStockPrice(
 						previousDate.toISOString().split("T")[0]
 					);
@@ -40,6 +50,10 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 			const today = new Date().toISOString().split("T")[0];
 			fetchStockPrice(today);
 		};
+
+		// Reset error state when stockSymbol changes
+		setError(null);
+		setData(null);
 
 		fetchStockPriceInitial();
 	}, [stockSymbol]);

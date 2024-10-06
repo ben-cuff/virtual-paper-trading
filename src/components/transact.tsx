@@ -16,6 +16,11 @@ export default function Transact({ id }: { id: number }) {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
+		if (!stockSymbol || !transactionType || (!shares && !dollars)) {
+			alert("Please fill in all fields.");
+			return;
+		}
+
 		const stockData = await getStockData(stockSymbol);
 
 		console.log(JSON.stringify(stockData,null,2))
