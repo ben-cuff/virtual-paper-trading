@@ -47,7 +47,6 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 		openingPrice = curPrice;
 	}
 
-	console.log(openingPrice, curPrice);
 	if (curPrice === undefined || curPrice === null) {
 		throw new Error("Current price is not available");
 	}

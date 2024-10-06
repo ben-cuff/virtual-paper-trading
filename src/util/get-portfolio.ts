@@ -1,6 +1,6 @@
 export default async function getPortfolio(id: number) {
 	const response = await fetch(
-		`process.env.NEXT_PUBLIC_API_URL/portfolio/${id}/`,
+		`${process.env.NEXT_PUBLIC_API_URL}/portfolio/${id}`,
 		{
 			method: "GET",
 			headers: new Headers({ "Content-Type": "application/json" }),

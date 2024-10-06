@@ -1,3 +1,5 @@
+"use client";
+
 import buyStock from "@/util/buy-stock";
 import { fetchData } from "@/util/fetch-data";
 import { reloadSession } from "@/util/reload-session";
