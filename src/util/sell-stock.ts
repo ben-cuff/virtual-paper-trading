@@ -8,9 +8,9 @@ export default async function sellStock(
 		`${process.env.NEXT_PUBLIC_API_URL}/sell/${id}`,
 		{
 			method: "POST",
-			headers: {
+			headers: new Headers({
 				"Content-Type": "application/json",
-			},
+			}),
 			body: JSON.stringify({
 				stock_symbol: symbol,
 				quantity: quantity,

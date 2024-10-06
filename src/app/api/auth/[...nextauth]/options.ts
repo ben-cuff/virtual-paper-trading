@@ -1,4 +1,4 @@
-import getBalance from "@/app/util/get-balance";
+import getBalance from "@/util/get-balance";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 

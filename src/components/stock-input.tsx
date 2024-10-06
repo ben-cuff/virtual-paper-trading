@@ -1,4 +1,4 @@
-import { fetchData } from "@/app/util/fetch-data";
+import { fetchData } from "@/util/fetch-data";
 import { useEffect, useState } from "react";
 
 const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
