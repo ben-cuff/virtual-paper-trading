@@ -7,12 +7,13 @@ import { authOptions } from "./api/auth/[...nextauth]/options";
 
 export default async function Home() {
 	const session = await getServerSession(authOptions);
-
-	const user = await fetchData(
-		`${process.env.NEXT_PUBLIC_API_URL}/users/${session?.user.id}/`
-	);
-
-	const balance = user.balance;
+	let user = null;
+	if (session) {
+		user = await fetchData(
+			`${process.env.NEXT_PUBLIC_API_URL}/users/${session?.user.id}/`
+		);
+	}
+	const balance = user ? user.balance : 0;
 
 	return (
 		<div>

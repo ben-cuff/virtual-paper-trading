@@ -1,5 +1,5 @@
 import { fetchData } from "@/util/fetch-data";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 	interface StockData {
@@ -9,28 +9,31 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 
 	const [data, setData] = useState<StockData | null>(null);
 
-	const fetchStockPrice = async (date: string) => {
-		try {
-			const [stockData, response] = await Promise.all([
-				fetchData(
-					`api/stocks/getCandle?symbol=${stockSymbol}&resolution=D&from=${date}&to=${date}`
-				),
-				fetchData(`api/stocks/getStockData?symbol=${stockSymbol}`),
-			]);
+	const fetchStockPrice = useCallback(
+		async (date: string) => {
+			try {
+				const [stockData, response] = await Promise.all([
+					fetchData(
+						`api/stocks/getCandle?symbol=${stockSymbol}&resolution=D&from=${date}&to=${date}`
+					),
+					fetchData(`api/stocks/getStockData?symbol=${stockSymbol}`),
+				]);
 
-			const curPrice = response.last;
-			stockData.curPrice = curPrice;
+				const curPrice = response.last;
+				stockData.curPrice = curPrice;
 
-			setData(stockData);
-		} catch (err) {
-			console.error(err);
-		}
-	};
+				setData(stockData);
+			} catch (err) {
+				console.error(err);
+			}
+		},
+		[stockSymbol]
+	);
 
 	useEffect(() => {
 		const today = new Date().toISOString().split("T")[0];
 		fetchStockPrice(today);
-	},);
+	}, [fetchStockPrice]);
 
 	if (!data) {
 		return <p>Loading...</p>;
