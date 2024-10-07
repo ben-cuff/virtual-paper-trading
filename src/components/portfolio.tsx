@@ -18,6 +18,7 @@ interface Stock {
 
 interface PortfolioData {
 	user: User;
+	total_worth: number;
 	portfolio: Stock[];
 }
 
@@ -41,6 +42,28 @@ export default function Portfolio({ id }: { id: number }) {
 			);
 
 			result.portfolio = updatedPortfolio;
+
+			const totalWorth =
+				result.user.balance +
+				result.portfolio.reduce(
+					(acc: number, stock: Stock) =>
+						acc + stock.shares_owned * stock.current_price,
+					0
+				);
+			result.total_worth = totalWorth;
+
+			await fetch(
+				`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/${result.user.id}`,
+				{
+					method: "POST",
+					headers: new Headers({
+						"Content-Type": "application/json",
+					}),
+					body: JSON.stringify({
+						total_worth: totalWorth,
+					}),
+				}
+			);
 
 			setData(result);
 		}
@@ -92,18 +115,7 @@ export default function Portfolio({ id }: { id: number }) {
 						))}
 					</ul>
 					<h2>Total Portfolio Value</h2>
-					<p>
-						$
-						{(
-							data.user.balance +
-							data.portfolio.reduce(
-								(acc, stock) =>
-									acc +
-									stock.shares_owned * stock.current_price,
-								0
-							)
-						).toFixed(2)}
-					</p>
+					<p>${data.total_worth.toFixed(2)}</p>
 				</>
 			)}
 		</div>
