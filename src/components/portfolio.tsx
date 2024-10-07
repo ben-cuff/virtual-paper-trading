@@ -2,25 +2,25 @@
 
 import getPortfolio from "@/util/get-portfolio";
 import { useEffect, useState } from "react";
-import { fetchData } from "@/util/fetch-data";
+
+interface User {
+	name: string;
+	balance: number;
+}
+
+interface Stock {
+	stock_symbol: string;
+	shares_owned: number;
+	average_price: number;
+	current_price: number;
+}
+
+interface PortfolioData {
+	user: User;
+	portfolio: Stock[];
+}
 
 export default function Portfolio({ id }: { id: number }) {
-	interface User {
-		name: string;
-		balance: number;
-	}
-
-	interface Stock {
-		stock_symbol: string;
-		shares_owned: number;
-        average_price: number;
-        current_price: number;
-	}
-
-	interface PortfolioData {
-		user: User;
-		portfolio: Stock[];
-	}
 
 	const [data, setData] = useState<PortfolioData | null>(null);
 

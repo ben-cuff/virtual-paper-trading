@@ -30,10 +30,10 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 	useEffect(() => {
 		const today = new Date().toISOString().split("T")[0];
 		fetchStockPrice(today);
-	}, [stockSymbol]);
+	},);
 
 	if (!data) {
-		return <p>Loading...</p>; // You can display a loading message while fetching data
+		return <p>Loading...</p>;
 	}
 
 	let openingPrice = data.o;
