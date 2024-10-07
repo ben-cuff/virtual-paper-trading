@@ -1,5 +1,6 @@
 "use client";
 
+import { fetchData } from "@/util/fetch-data";
 import getPortfolio from "@/util/get-portfolio";
 import { useEffect, useState } from "react";
 
@@ -21,22 +22,30 @@ interface PortfolioData {
 }
 
 export default function Portfolio({ id }: { id: number }) {
-
 	const [data, setData] = useState<PortfolioData | null>(null);
 
 	useEffect(() => {
-		async function fetchData() {
+		async function getData() {
 			const result = await getPortfolio(id);
+
+			const updatedPortfolio = await Promise.all(
+				result.portfolio.map(async (stock: Stock) => {
+					const currentPrice = await fetchData(
+						`api/stocks/getStockData?symbol=${stock.stock_symbol}`
+					);
+					return {
+						...stock,
+						current_price: currentPrice.last,
+					};
+				})
+			);
+
+			result.portfolio = updatedPortfolio;
+
 			setData(result);
 		}
-		fetchData();
+		getData();
 	}, [id]);
-
-	useEffect(() => {
-		if (data) {
-			console.log(JSON.stringify(data, null, 2));
-		}
-	}, [data]);
 
 	return (
 		<div>
@@ -58,6 +67,27 @@ export default function Portfolio({ id }: { id: number }) {
 								</p>
 								<p>Shares Owned: {stock.shares_owned}</p>
 								<p>Average Price: ${stock.average_price}</p>
+								<p>
+									Current Price: ${stock.current_price} (
+									<span
+										className={
+											stock.current_price -
+												stock.average_price <
+											0
+												? "text-red-500"
+												: "text-green-500"
+										}
+									>
+										{(
+											((stock.current_price -
+												stock.average_price) /
+												stock.average_price) *
+											100
+										).toFixed(2)}
+										%
+									</span>
+									)
+								</p>
 							</li>
 						))}
 					</ul>
@@ -69,7 +99,7 @@ export default function Portfolio({ id }: { id: number }) {
 							data.portfolio.reduce(
 								(acc, stock) =>
 									acc +
-									stock.shares_owned * stock.average_price,
+									stock.shares_owned * stock.current_price,
 								0
 							)
 						).toFixed(2)}
