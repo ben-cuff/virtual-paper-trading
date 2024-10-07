@@ -15,11 +15,15 @@ export default function Register() {
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [passwordCopy, setPasswordCopy] = useState("");
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		console.log(name, email, password);
+		if (password !== passwordCopy) {
+			alert("Make sure the passwords are the same")
+			return;
+		}
 
 		const response = await fetch(
 			`${process.env.NEXT_PUBLIC_API_URL}/users`,
@@ -74,6 +78,16 @@ export default function Register() {
 					id="password"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
+					required
+				/>
+			</div>
+			<div>
+				<label htmlFor="passwordCopy">Confirm Password:</label>
+				<input
+					type="password"
+					id="passwordCopy"
+					value={passwordCopy}
+					onChange={(e) => setPasswordCopy(e.target.value)}
 					required
 				/>
 			</div>

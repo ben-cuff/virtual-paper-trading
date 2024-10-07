@@ -1,5 +1,6 @@
-import ClientProvider from "@/components/sessionProvider";
+import ClientProvider from "@/components/session-provider";
 import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
 	title: "Paper Trading",
