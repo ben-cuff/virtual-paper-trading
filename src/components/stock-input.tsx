@@ -59,7 +59,8 @@ export default function StockInput({ stockSymbol }: { stockSymbol: string }) {
 		openingPrice = curPrice;
 	}
 
-	// Function to handle refresh
+	const dayChange = ((curPrice - openingPrice) / openingPrice) * 100;
+
 	const handleRefresh = () => {
 		const today = new Date().toISOString().split("T")[0];
 		fetchStockPrice(today);
@@ -76,10 +77,7 @@ export default function StockInput({ stockSymbol }: { stockSymbol: string }) {
 							: "text-green-500"
 					}
 				>
-					{(((curPrice - openingPrice) / openingPrice) * 100).toFixed(
-						2
-					)}
-					%
+					{dayChange.toFixed(2)}%
 				</span>
 				)
 			</p>
