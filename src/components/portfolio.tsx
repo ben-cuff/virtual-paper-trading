@@ -1,5 +1,6 @@
 "use client";
 
+import { fetchData } from "@/util/fetch-data";
 import getPortfolio from "@/util/get-portfolio";
 import { useEffect, useState } from "react";
 
@@ -13,30 +14,70 @@ interface Stock {
 	shares_owned: number;
 	average_price: number;
 	current_price: number;
+	total_change: number;
 }
 
 interface PortfolioData {
 	user: User;
+	total_worth: number;
 	portfolio: Stock[];
 }
 
 export default function Portfolio({ id }: { id: number }) {
-
 	const [data, setData] = useState<PortfolioData | null>(null);
 
 	useEffect(() => {
-		async function fetchData() {
+		async function getData() {
 			const result = await getPortfolio(id);
+
+			const updatedPortfolio = await Promise.all(
+				result.portfolio.map(async (stock: Stock) => {
+					const currentPrice = await fetchData(
+						`api/stocks/getStockData?symbol=${stock.stock_symbol}`
+					);
+					return {
+						...stock,
+						current_price: currentPrice.last,
+					};
+				})
+			);
+
+			result.portfolio = updatedPortfolio;
+
+			const totalWorth =
+				result.user.balance +
+				result.portfolio.reduce(
+					(acc: number, stock: Stock) =>
+						acc + stock.shares_owned * stock.current_price,
+					0
+				);
+			result.total_worth = totalWorth;
+
+			result.portfolio = result.portfolio.map((stock: Stock) => ({
+				...stock,
+				total_change:
+					((stock.current_price - stock.average_price) /
+						stock.average_price) *
+					100,
+			}));
+
+			await fetch(
+				`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/${result.user.id}`,
+				{
+					method: "POST",
+					headers: new Headers({
+						"Content-Type": "application/json",
+					}),
+					body: JSON.stringify({
+						total_worth: totalWorth,
+					}),
+				}
+			);
+
 			setData(result);
 		}
-		fetchData();
+		getData();
 	}, [id]);
-
-	useEffect(() => {
-		if (data) {
-			console.log(JSON.stringify(data, null, 2));
-		}
-	}, [data]);
 
 	return (
 		<div>
@@ -58,22 +99,24 @@ export default function Portfolio({ id }: { id: number }) {
 								</p>
 								<p>Shares Owned: {stock.shares_owned}</p>
 								<p>Average Price: ${stock.average_price}</p>
+								<p>
+									Current Price: ${stock.current_price} (
+									<span
+										className={
+											stock.total_change < 0
+												? "text-red-500"
+												: "text-green-500"
+										}
+									>
+										{stock.total_change.toFixed(2)}%
+									</span>
+									)
+								</p>
 							</li>
 						))}
 					</ul>
 					<h2>Total Portfolio Value</h2>
-					<p>
-						$
-						{(
-							data.user.balance +
-							data.portfolio.reduce(
-								(acc, stock) =>
-									acc +
-									stock.shares_owned * stock.average_price,
-								0
-							)
-						).toFixed(2)}
-					</p>
+					<p>${data.total_worth.toFixed(2)}</p>
 				</>
 			)}
 		</div>

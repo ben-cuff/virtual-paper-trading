@@ -84,9 +84,9 @@ export default function Transact({ id }: { id: number }) {
 						Stock Symbol:
 						<input
 							type="text"
-							value={stockSymbol}
+							value={stockSymbol.toUpperCase()}
 							onChange={(e) => {
-								setStockSymbol(e.target.value);
+								setStockSymbol(e.target.value.toUpperCase());
 								setStockDataToggle(false);
 							}}
 						/>
