@@ -14,6 +14,7 @@ interface Stock {
 	shares_owned: number;
 	average_price: number;
 	current_price: number;
+	total_change: number;
 }
 
 interface PortfolioData {
@@ -51,6 +52,14 @@ export default function Portfolio({ id }: { id: number }) {
 					0
 				);
 			result.total_worth = totalWorth;
+
+			result.portfolio = result.portfolio.map((stock: Stock) => ({
+				...stock,
+				total_change:
+					((stock.current_price - stock.average_price) /
+						stock.average_price) *
+					100,
+			}));
 
 			await fetch(
 				`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/${result.user.id}`,
@@ -94,20 +103,12 @@ export default function Portfolio({ id }: { id: number }) {
 									Current Price: ${stock.current_price} (
 									<span
 										className={
-											stock.current_price -
-												stock.average_price <
-											0
+											stock.total_change < 0
 												? "text-red-500"
 												: "text-green-500"
 										}
 									>
-										{(
-											((stock.current_price -
-												stock.average_price) /
-												stock.average_price) *
-											100
-										).toFixed(2)}
-										%
+										{stock.total_change.toFixed(2)}%
 									</span>
 									)
 								</p>
