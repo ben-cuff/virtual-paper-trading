@@ -1,30 +1,39 @@
 import { fetchData } from "@/util/fetch-data";
 import { useCallback, useEffect, useState } from "react";
 
-const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
-	interface StockData {
-		o: number;
-		curPrice: number;
-	}
+interface StockData {
+	o: number;
+	curPrice: number;
+}
 
+interface StockApiResponse {
+	last: number;
+}
+
+export default function StockInput({ stockSymbol }: { stockSymbol: string }) {
 	const [data, setData] = useState<StockData | null>(null);
+	const [loading, setLoading] = useState(true);
 
 	const fetchStockPrice = useCallback(
 		async (date: string) => {
 			try {
-				const [stockData, response] = await Promise.all([
-					fetchData(
-						`api/stocks/getCandle?symbol=${stockSymbol}&resolution=D&from=${date}&to=${date}`
-					),
-					fetchData(`api/stocks/getStockData?symbol=${stockSymbol}`),
-				]);
+				const [stockData, response]: [StockData, StockApiResponse] =
+					await Promise.all([
+						fetchData(
+							`api/stocks/getCandle?symbol=${stockSymbol}&resolution=D&from=${date}&to=${date}`
+						),
+						fetchData(
+							`api/stocks/getStockData?symbol=${stockSymbol}`
+						),
+					]);
 
 				const curPrice = response.last;
 				stockData.curPrice = curPrice;
-
+				setLoading(false);
 				setData(stockData);
 			} catch (err) {
 				console.error(err);
+				setLoading(false);
 			}
 		},
 		[stockSymbol]
@@ -35,19 +44,19 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 		fetchStockPrice(today);
 	}, [fetchStockPrice]);
 
-	if (!data) {
+	if (loading) {
 		return <p>Loading...</p>;
 	}
 
-	let openingPrice = data.o;
-	const curPrice = data.curPrice;
+	if (!data && !loading) {
+		return <p>Could not find stock data</p>;
+	}
+
+	let openingPrice = data ? data.o : 0;
+	const curPrice = data ? data.curPrice : 0;
 
 	if (isNaN(openingPrice)) {
 		openingPrice = curPrice;
-	}
-
-	if (curPrice === undefined || curPrice === null) {
-		throw new Error("Current price is not available");
 	}
 
 	// Function to handle refresh
@@ -77,6 +86,4 @@ const StockInput = ({ stockSymbol }: { stockSymbol: string }) => {
 			<button onClick={handleRefresh}>Refresh</button>
 		</div>
 	);
-};
-
-export default StockInput;
+}
