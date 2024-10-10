@@ -38,7 +38,6 @@ export default function Transact({ id }: { id: number }) {
 			stockData = await fetchData(
 				`api/stocks/getStockData?symbol=${stockSymbol}`
 			);
-			console.log(JSON.stringify(stockData, null, 2));
 		} catch (error) {
 			console.error("Error fetching stock data:", error);
 			alert("Failed to fetch stock data. Please try again.");
