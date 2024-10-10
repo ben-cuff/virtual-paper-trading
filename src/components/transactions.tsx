@@ -36,6 +36,12 @@ export default function Transactions({ id }: { id: number }) {
 					};
 				}
 			);
+            transactionsList.sort(
+                (
+                    a: { time: string | number | Date },
+                    b: { time: string | number | Date }
+                ) => new Date(b.time).getTime() - new Date(a.time).getTime()
+            );
 			setData(transactionsList);
 		}
 		getData();
