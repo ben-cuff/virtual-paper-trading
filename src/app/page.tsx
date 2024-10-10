@@ -1,6 +1,7 @@
 import Login from "@/components/login";
 import Portfolio from "@/components/portfolio";
 import Transact from "@/components/transact";
+import Transactions from "@/components/transactions";
 import { fetchData } from "@/util/fetch-data";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/options";
@@ -27,6 +28,7 @@ export default async function Home() {
 
 					<Transact id={session.user.id as number} />
 					<Portfolio id={session.user.id as number} />
+					<Transactions id={session.user.id as number} />
 				</>
 			) : (
 				<></>
