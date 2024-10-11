@@ -35,13 +35,10 @@ export default function Transactions({ id }: { id: number }) {
 						time: item.time,
 					};
 				}
-			);
-            transactionsList.sort(
-                (
-                    a: { time: string | number | Date },
-                    b: { time: string | number | Date }
-                ) => new Date(b.time).getTime() - new Date(a.time).getTime()
             );
+            
+            // reverses the list
+            transactionsList.reverse();
 			setData(transactionsList);
 		}
 		getData();
