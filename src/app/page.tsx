@@ -1,4 +1,5 @@
-import Login from "@/components/login";
+import Login from "@/components/navigation/login";
+import Logout from "@/components/navigation/logout";
 import Portfolio from "@/components/portfolio";
 import Transact from "@/components/transact";
 import Transactions from "@/components/transactions";
