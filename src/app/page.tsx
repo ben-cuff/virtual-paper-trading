@@ -16,23 +16,21 @@ export default async function Home() {
 	}
 	const balance = user ? user.balance : 0;
 
+	if (session) {
+		return (
+			<div>
+				<div>Welcome, {session.user?.name}</div>
+				<div>Your cash available to trade is {balance.toFixed(3)}</div>
+
+				<Transact id={session.user.id as number} />
+				<Portfolio id={session.user.id as number} />
+				<Transactions id={session.user.id as number} />
+			</div>
+		);
+	}
+
 	return (
 		<div>
-			<div>Home page</div>
-			{session ? (
-				<>
-					<div>Welcome, {session.user?.name}</div>
-					<div>
-						Your cash available to trade is {balance.toFixed(3)}
-					</div>
-
-					<Transact id={session.user.id as number} />
-					<Portfolio id={session.user.id as number} />
-					<Transactions id={session.user.id as number} />
-				</>
-			) : (
-				<></>
-			)}
 			<Login />
 		</div>
 	);
