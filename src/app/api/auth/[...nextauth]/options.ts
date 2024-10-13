@@ -42,10 +42,13 @@ export const authOptions: NextAuthOptions = {
 
 				const data = await res.json();
 
+				console.log(JSON.stringify(data, null, 2));
+
 				if (res.ok && data.success) {
 					return data.user;
+				} else {
+					return null;
 				}
-				return null;
 			},
 		}),
 	],
