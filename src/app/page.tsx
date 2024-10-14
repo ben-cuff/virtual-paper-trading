@@ -26,6 +26,7 @@ export default async function Home() {
 				<Transact id={session.user.id as number} />
 				<Portfolio id={session.user.id as number} />
 				<Transactions id={session.user.id as number} />
+				<Logout />
 			</div>
 		);
 	}
