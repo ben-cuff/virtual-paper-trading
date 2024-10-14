@@ -4,7 +4,7 @@ module.exports = {
 		extend: {
 			backgroundImage: {
 				"custom-gradient":
-					"linear-gradient(120deg, #1f2937 0%, #2d3748 100%)",
+					"radial-gradient(circle at 50% 70px, hsl(240, 20%, 28%) 0%, hsl(240, 27%, 12%) 100%)",
 			},
 		},
 	},
