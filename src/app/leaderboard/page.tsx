@@ -1,14 +1,13 @@
+import { fetchData } from "@/util/fetch-data";
+
 interface LeaderboardEntry {
 	name: string;
 	total_worth: number;
 }
 
 export default async function LeaderboardPage() {
-	const response = await fetch(`${process.env.BASE_URL}/api/leaderboard/`, {
-		method: "GET",
-	});
+	const data = await fetchData(`${process.env.BASE_URL}/api/leaderboard/`);
 
-	const data = await response.json();
 	const leaderboard = data.leaderboard;
 
 	return (
