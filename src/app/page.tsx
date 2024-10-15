@@ -4,6 +4,7 @@ import Portfolio from "@/components/portfolio";
 import Transact from "@/components/transact";
 import Transactions from "@/components/transactions";
 import { getServerSession } from "next-auth";
+import { Suspense } from "react";
 import { authOptions } from "./api/auth/[...nextauth]/options";
 
 export default async function Home() {
@@ -12,9 +13,15 @@ export default async function Home() {
 	if (session) {
 		return (
 			<div>
-				<Transact id={session.user.id as number} />
-				<Portfolio id={session.user.id as number} />
-				<Transactions id={session.user.id as number} />
+				<Suspense fallback={<div>Loading Transact...</div>}>
+					<Transact id={session.user.id as number} />
+				</Suspense>
+				<Suspense fallback={<div>Loading Portfolio...</div>}>
+					<Portfolio id={session.user.id as number} />
+				</Suspense>
+				<Suspense fallback={<div>Loading Transactions...</div>}>
+					<Transactions id={session.user.id as number} />
+				</Suspense>
 				<Logout />
 			</div>
 		);
