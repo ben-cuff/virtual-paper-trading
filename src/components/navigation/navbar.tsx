@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Logout from "./logout";
+import Profile from "./profile";
 
 export default function NavBar() {
 	const currentRoute = usePathname();
@@ -47,7 +47,7 @@ export default function NavBar() {
 						</Link>
 					</div>
 				</div>
-				<Logout />
+				<Profile />
 			</div>
 		</nav>
 	);
