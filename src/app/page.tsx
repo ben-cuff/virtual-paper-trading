@@ -1,5 +1,3 @@
-import Login from "@/components/navigation/login";
-import Logout from "@/components/navigation/logout";
 import Portfolio from "@/components/portfolio";
 import Transact from "@/components/transact";
 import Transactions from "@/components/transactions";
@@ -22,14 +20,9 @@ export default async function Home() {
 				<Suspense fallback={<div>Loading Transactions...</div>}>
 					<Transactions id={session.user.id as number} />
 				</Suspense>
-				<Logout />
 			</div>
 		);
 	}
 
-	return (
-		<div>
-			<Login />
-		</div>
-	);
+	return <div></div>;
 }
