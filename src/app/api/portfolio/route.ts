@@ -6,7 +6,7 @@ export async function GET(request: Request) {
 
 	if (!id) {
 		return NextResponse.json(
-			{ error: "User ID is required" },
+			{ error: "Portfolio ID is required" },
 			{ status: 400 }
 		);
 	}
