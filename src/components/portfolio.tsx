@@ -13,14 +13,14 @@ interface Stock {
 	total_change: number;
 }
 
-interface PortfoliostockData {
+interface PortfolioData {
 	user: User;
 	total_worth: number;
 	portfolio: Stock[];
 }
 
 export default async function Portfolio({ id }: { id: number }) {
-	const stockData: PortfoliostockData = await fetchData(
+	const stockData: PortfolioData = await fetchData(
 		`${process.env.BASE_URL}/api/portfolio?id=${id}`
 	);
 
