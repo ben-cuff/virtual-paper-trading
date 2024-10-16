@@ -1,16 +1,15 @@
 import { fetchData } from "@/util/fetch-data";
-import { GetServerSideProps } from "next";
 
 interface LeaderboardEntry {
 	name: string;
 	total_worth: number;
 }
 
-interface LeaderboardPageProps {
-	leaderboard: LeaderboardEntry[];
-}
+export default async function LeaderboardPage() {
+	const data = await fetchData(`${process.env.BASE_URL}/api/leaderboard/`);
 
-const LeaderboardPage: React.FC<LeaderboardPageProps> = ({ leaderboard }) => {
+	const leaderboard = data.leaderboard;
+
 	return (
 		<div className="p-4">
 			<h1 className="text-2xl font-bold mb-4 text-gray-300">
@@ -46,17 +45,4 @@ const LeaderboardPage: React.FC<LeaderboardPageProps> = ({ leaderboard }) => {
 			</table>
 		</div>
 	);
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-	const data = await fetchData(`${process.env.BASE_URL}/api/leaderboard/`);
-	const leaderboard = data.leaderboard;
-
-	return {
-		props: {
-			leaderboard,
-		},
-	};
-};
-
-export default LeaderboardPage;
+}
