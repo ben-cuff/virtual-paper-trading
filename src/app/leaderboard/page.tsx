@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { fetchData } from "@/util/fetch-data";
 
 interface LeaderboardEntry {
