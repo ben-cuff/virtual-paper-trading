@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function DELETE(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get("id");
 
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 		const response = await fetch(
 			`${process.env.NEXT_PUBLIC_API_URL}/reset/${id}`,
 			{
-				method: "GET",
+				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
 				},
