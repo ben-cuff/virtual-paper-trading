@@ -47,7 +47,7 @@ export default function Register() {
 			return;
 		}
 
-		router.push("/");
+		router.push("/signin");
 	};
 
 	return (
