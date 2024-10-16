@@ -13,7 +13,7 @@ export async function GET(request: Request) {
 
 	try {
 		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/reset/${id}`,
+			`${process.env.NEXT_PUBLIC_API_URL}/portfolio/${id}`,
 			{
 				method: "GET",
 				headers: {

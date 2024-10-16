@@ -13,7 +13,7 @@ export async function GET(request: Request) {
 
 	try {
 		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/delete/${id}`,
+			`${process.env.NEXT_PUBLIC_API_URL}/reset/${id}`,
 			{
 				method: "GET",
 				headers: {
@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 	} catch (error) {
 		console.error(error);
 		return NextResponse.json(
-			{ error: "Failed to delete user" },
+			{ error: "Failed to reset user" },
 			{ status: 500 }
 		);
 	}
