@@ -63,7 +63,7 @@ export default function SettingsPage() {
 	};
 
 	return (
-		<div className="flex flex-col items-center gap-2.5">
+		<div className="flex flex-col items-center gap-2.5 mt-20">
 			<button
 				onClick={() => {
 					if (
@@ -88,7 +88,7 @@ export default function SettingsPage() {
 						handleDeleteAccount();
 					}
 				}}
-				className="px-5 py-2.5 bg-red-600 text-white border-none rounded cursor-pointer"
+				className="px-5 py-2.5 bg-red-600 text-white border-none rounded cursor-pointer mt-8"
 			>
 				Delete Account
 			</button>
