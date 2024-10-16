@@ -44,8 +44,9 @@ export const authOptions: NextAuthOptions = {
 
 				if (res.ok && data.success) {
 					return data.user;
+				} else {
+					return null;
 				}
-				return null;
 			},
 		}),
 	],
@@ -70,4 +71,7 @@ export const authOptions: NextAuthOptions = {
 			return session;
 		},
 	},
+	pages: {
+		signIn: '/signin'
+	}
 };

@@ -1,37 +1,28 @@
-import Login from "@/components/login";
 import Portfolio from "@/components/portfolio";
 import Transact from "@/components/transact";
-import { fetchData } from "@/util/fetch-data";
+import Transactions from "@/components/transactions";
 import { getServerSession } from "next-auth";
+import { Suspense } from "react";
 import { authOptions } from "./api/auth/[...nextauth]/options";
 
 export default async function Home() {
 	const session = await getServerSession(authOptions);
-	let user = null;
+
 	if (session) {
-		user = await fetchData(
-			`${process.env.NEXT_PUBLIC_API_URL}/users/${session?.user.id}/`
+		return (
+			<div>
+				<Suspense fallback={<div>Loading Transact...</div>}>
+					<Transact id={session.user.id as number} />
+				</Suspense>
+				<Suspense fallback={<div>Loading Portfolio...</div>}>
+					<Portfolio id={session.user.id as number} />
+				</Suspense>
+				<Suspense fallback={<div>Loading Transactions...</div>}>
+					<Transactions id={session.user.id as number} />
+				</Suspense>
+			</div>
 		);
 	}
-	const balance = user ? user.balance : 0;
 
-	return (
-		<div>
-			<div>Home page</div>
-			{session ? (
-				<>
-					<div>Welcome, {session.user?.name}</div>
-					<div>
-						Your cash available to trade is {balance.toFixed(3)}
-					</div>
-
-					<Transact id={session.user.id as number} />
-					<Portfolio id={session.user.id as number} />
-				</>
-			) : (
-				<></>
-			)}
-			<Login />
-		</div>
-	);
+	return <div></div>;
 }

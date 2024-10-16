@@ -1,3 +1,4 @@
+import NavBar from "@/components/navigation/navbar";
 import ClientProvider from "@/components/session-provider";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -15,7 +16,12 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<ClientProvider>{children}</ClientProvider>
+				<ClientProvider>
+					<div>
+						<NavBar />
+					</div>
+					{children}
+				</ClientProvider>
 			</body>
 		</html>
 	);
