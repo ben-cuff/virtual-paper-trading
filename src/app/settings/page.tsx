@@ -2,13 +2,20 @@
 
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function SettingsPage() {
-	const { data: session } = useSession();
+	const { data: session, status } = useSession();
 	const router = useRouter();
 
-	if (!session) {
-		router.push("/");
+	useEffect(() => {
+		if (status === "unauthenticated") {
+			router.push("/");
+		}
+	}, [status, router]);
+
+	if (status === "loading") {
+		return <div>Loading...</div>;
 	}
 
 	const handleResetAccount = async () => {
