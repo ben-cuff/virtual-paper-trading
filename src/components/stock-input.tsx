@@ -70,7 +70,7 @@ export default function StockInput({ stockSymbol }: { stockSymbol: string }) {
 	return (
 		<div className="flex items-center space-x-2">
 			<span className="flex items-center space-x-1">
-				<p className="text-lg font-semibold">
+				<p className="text-md font-semibold">
 					{stockSymbol}: {curPrice} (
 					<span
 						className={
