@@ -1,4 +1,5 @@
 import { fetchData } from "@/util/fetch-data";
+import { notFound } from "next/navigation";
 
 interface User {
 	name: string;
@@ -19,10 +20,22 @@ interface PortfolioData {
 	portfolio: Stock[];
 }
 
-export default async function Portfolio({ id }: { id: number }) {
-	const stockData: PortfolioData = await fetchData(
-		`${process.env.BASE_URL}/api/portfolio?id=${id}`
-	);
+export default async function PortfolioPage({
+	params,
+}: {
+	params: { id: string };
+}) {
+	const { id } = params;
+
+	let stockData: PortfolioData;
+
+	try {
+		stockData = await fetchData(
+			`${process.env.BASE_URL}/api/portfolio?id=${id}`
+		);
+	} catch (error) {
+		return notFound();
+	}
 
 	const updatedPortfolio = await Promise.all(
 		stockData.portfolio.map(async (stock: Stock) => {
@@ -66,7 +79,9 @@ export default async function Portfolio({ id }: { id: number }) {
 
 	return (
 		<div className="p-4 shadow-md text-white shadow-top h-96 mt-1">
-			<h2 className="text-xl font-bold mb-2 text-center">Portfolio</h2>
+			<h2 className="text-xl font-bold mb-2 text-center">
+				Portfolio for {stockData.user.name}
+			</h2>
 			{stockData ? (
 				<>
 					<div className="mb-4 text-right">

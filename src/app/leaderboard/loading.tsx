@@ -24,7 +24,7 @@ export default function LeaderboardLoading() {
 								<div className="h-4 bg-gray-300 rounded w-3/4"></div>
 							</td>
 							<td className="py-2 px-4 border-b text-right">
-								<div className="h-4 bg-gray-300 rounded w-3/4"></div>
+								<div className="h-4 bg-gray-300 rounded w-1/4 ml-auto"></div>
 							</td>
 						</tr>
 					))}

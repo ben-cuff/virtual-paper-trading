@@ -1,9 +1,11 @@
 export const dynamic = "force-dynamic";
 
 import { fetchData } from "@/util/fetch-data";
+import Link from "next/link";
 
 interface LeaderboardEntry {
 	name: string;
+	user_id: number;
 	total_worth: number;
 }
 
@@ -36,7 +38,12 @@ export default async function LeaderboardPage() {
 									{index + 1}
 								</td>
 								<td className="py-2 px-4 border-b">
-									{entry.name}
+									<Link
+										href={`/portfolio/${entry.user_id}`}
+										className="hover:text-blue-500 hover:underline"
+									>
+										{entry.name}
+									</Link>
 								</td>
 								<td className="py-2 px-4 border-b text-right">
 									{entry.total_worth}
