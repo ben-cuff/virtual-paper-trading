@@ -45,7 +45,16 @@ export default async function Portfolio({ id }: { id: number }) {
 				acc + stock.shares_owned * stock.current_price,
 			0
 		);
+
 	stockData.total_worth = totalWorth;
+
+	await fetch(`${process.env.BASE_URL}/api/leaderboard?id=${id}`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ total_worth: totalWorth }),
+	});
 
 	stockData.portfolio = stockData.portfolio.map((stock: Stock) => ({
 		...stock,
