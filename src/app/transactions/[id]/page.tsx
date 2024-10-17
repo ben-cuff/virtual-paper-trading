@@ -9,6 +9,8 @@ interface Transaction {
 	time: string;
 }
 
+type TransactionData = Transaction[];
+
 export default async function TransactionPage({
 	params,
 }: {

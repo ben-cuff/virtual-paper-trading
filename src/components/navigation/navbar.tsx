@@ -32,7 +32,8 @@ export default function NavBar() {
 							<Link
 								href={`/transactions/${session.user.id}`}
 								className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
-									currentRoute === "/transactions"
+									currentRoute ===
+									`/transactions/${session.user.id}`
 										? "border-b-2 border-white"
 										: ""
 								}`}

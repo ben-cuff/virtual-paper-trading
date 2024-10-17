@@ -19,7 +19,7 @@ export async function GET() {
 		const data = await response.json();
 		return NextResponse.json(data, { status: 200 });
 	} catch (error) {
-		console.error(error);
+		console.error("Error fetching leaderboard:", error);
 		return NextResponse.json(
 			{ error: "Failed to fetch leaderboard" },
 			{ status: 500 }
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
 		const data = await response.json();
 		return NextResponse.json(data, { status: 200 });
 	} catch (error) {
-		console.error(error);
+		console.error("Error updating leaderboard:", error);
 		return NextResponse.json(
 			{ error: "Failed to update leaderboard" },
 			{ status: 500 }
