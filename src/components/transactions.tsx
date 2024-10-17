@@ -54,7 +54,7 @@ export default async function Transactions({ id }: { id: number }) {
 								{transaction.shares_quantity} shares of{" "}
 								{transaction.stock_symbol} for $
 								{transaction.price} at{" "}
-								{new Date(transaction.time).toLocaleString()}
+								{new Date(new Date(transaction.time).getTime() - 4 * 60 * 60 * 1000).toLocaleString()}
 							</p>
 						</li>
 					))}
