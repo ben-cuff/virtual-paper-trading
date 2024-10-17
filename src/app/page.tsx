@@ -1,3 +1,4 @@
+import LandingPage from "@/components/landing";
 import LoadingPortfolio from "@/components/loading/loading-portfolio";
 import LoadingTransactions from "@/components/loading/loading-transactions";
 import Portfolio from "@/components/portfolio";
@@ -15,9 +16,7 @@ export default async function Home() {
 			<div className="flex flex-col h-screen">
 				<div className="flex">
 					<div className="w-1/4">
-						<Suspense fallback={<div>Loading Transact...</div>}>
-							<Transact id={session.user.id as number} />
-						</Suspense>
+						<Transact id={session.user.id as number} />
 					</div>
 					<div className="w-1/2"></div>
 					<div className="w-1/4">
@@ -35,5 +34,5 @@ export default async function Home() {
 		);
 	}
 
-	return <div></div>;
+	return <LandingPage />;
 }
