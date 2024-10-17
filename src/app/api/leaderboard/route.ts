@@ -65,8 +65,6 @@ export async function POST(request: NextRequest) {
 		}
 
 		const data = await response.json();
-
-		console.log(JSON.stringify(data, null, 2));
 		return NextResponse.json(data, { status: 200 });
 	} catch (error) {
 		console.error(error);
