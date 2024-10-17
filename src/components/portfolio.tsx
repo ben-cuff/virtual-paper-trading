@@ -56,50 +56,85 @@ export default async function Portfolio({ id }: { id: number }) {
 	}));
 
 	return (
-		<div>
-			{stockData && (
+		<div className="p-4 shadow-md text-white shadow-top h-96 mt-1">
+			<h2 className="text-xl font-bold mb-2 text-center">Portfolio</h2>
+			{stockData ? (
 				<>
-					<h2>User Information</h2>
-					<p>Name: {stockData.user.name}</p>
-					<p>
-						Cash available to trade: $
-						{stockData.user.balance.toFixed(3)}
-					</p>
-					<h2>Portfolio</h2>
-					<ul>
-						{stockData.portfolio.map(
-							(stock: Stock, index: number) => (
-								<li key={index}>
-									<p>Stock Symbol: {stock.stock_symbol}</p>
-									<p>
-										Total Value: $
-										{(
-											stock.shares_owned *
-											stock.average_price
-										).toFixed(2)}
-									</p>
-									<p>Shares Owned: {stock.shares_owned}</p>
-									<p>Average Price: ${stock.average_price}</p>
-									<p>
-										Current Price: ${stock.current_price} (
-										<span
-											className={
-												stock.total_change < 0
-													? "text-red-500"
-													: "text-green-500"
-											}
+					<div className="mb-4 text-right">
+						<p>
+							Cash available to trade: $
+							{stockData.user.balance.toFixed(3)}
+						</p>
+					</div>
+					<div className="mb-4">
+						<table className="min-w-full  rounded-lg shadow-sm text-sm">
+							<thead>
+								<tr>
+									<th className="py-2 px-4">Symbol</th>
+									<th className="py-2 px-4">Value</th>
+									<th className="py-2 px-4">Shares</th>
+									<th className="py-2 px-4">Avg Price</th>
+									<th className="py-2 px-4">Current Price</th>
+									<th className="py-2 px-4">Change</th>
+								</tr>
+							</thead>
+							<tbody>
+								{stockData.portfolio.map(
+									(stock: Stock, index: number) => (
+										<tr
+											key={index}
+											className="border-t border-gray-600 text-center"
 										>
-											{stock.total_change.toFixed(2)}%
-										</span>
-										)
-									</p>
-								</li>
-							)
-						)}
-					</ul>
-					<h2>Total Portfolio Value</h2>
-					<p>${stockData.total_worth.toFixed(2)}</p>
+											<td className="py-2 px-4 font-semibold">
+												{stock.stock_symbol}
+											</td>
+											<td className="py-2 px-4">
+												$
+												{(
+													stock.shares_owned *
+													stock.average_price
+												).toFixed(2)}
+											</td>
+											<td className="py-2 px-4">
+												{stock.shares_owned}
+											</td>
+											<td className="py-2 px-4">
+												${stock.average_price}
+											</td>
+											<td className="py-2 px-4">
+												${stock.current_price}
+											</td>
+											<td className="py-2 px-4">
+												<span
+													className={
+														stock.total_change < 0
+															? "text-red-400"
+															: "text-green-400"
+													}
+												>
+													{stock.total_change.toFixed(
+														2
+													)}
+													%
+												</span>
+											</td>
+										</tr>
+									)
+								)}
+							</tbody>
+						</table>
+					</div>
+					<div>
+						<h3 className="text-lg font-semibold">
+							Total Portfolio Value
+						</h3>
+						<p className="text-lg">
+							${stockData.total_worth.toFixed(2)}
+						</p>
+					</div>
 				</>
+			) : (
+				<p>No portfolio data found.</p>
 			)}
 		</div>
 	);

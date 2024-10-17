@@ -18,7 +18,7 @@ export default async function Transactions({ id }: { id: number }) {
 	const transactionsList: TransactionData = result.transactions.map(
 		(item: Transaction) => {
 			return {
-				symbol: item.stock_symbol,
+				stock_symbol: item.stock_symbol,
 				transaction_type: item.transaction_type,
 				shares_quantity: item.shares_quantity,
 				price: item.price,
@@ -31,17 +31,31 @@ export default async function Transactions({ id }: { id: number }) {
 	transactionsList.reverse();
 
 	return (
-		<div>
-			transactions for user <br></br>
+		<div className="p-4 shadow-md border-gray-400 text-white h-96 overflow-y-auto">
+			<h2 className="text-xl font-bold mb-2 text-center">Transactions</h2>
 			{transactionsList.length > 0 ? (
-				<ul>
+				<ul className="space-y-2">
 					{transactionsList.map((transaction, index) => (
-						<li key={index}>
-							{transaction.stock_symbol} -{" "}
-							{transaction.transaction_type.toUpperCase()} -{" "}
-							{transaction.shares_quantity} shares at $
-							{transaction.price} on{" "}
-							{new Date(transaction.time).toLocaleString()}
+						<li
+							key={index}
+							className="py-2 px-4 bg-gray-700 rounded-lg shadow-sm text-sm"
+						>
+							<p>
+								<span
+									className={
+										transaction.transaction_type.toLowerCase() ===
+										"buy"
+											? "text-green-500"
+											: "text-red-500"
+									}
+								>
+									{transaction.transaction_type.toUpperCase()}
+								</span>{" "}
+								{transaction.shares_quantity} shares of{" "}
+								{transaction.stock_symbol} for $
+								{transaction.price} at{" "}
+								{new Date(transaction.time).toLocaleString()}
+							</p>
 						</li>
 					))}
 				</ul>

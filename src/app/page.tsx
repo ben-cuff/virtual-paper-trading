@@ -10,16 +10,25 @@ export default async function Home() {
 
 	if (session) {
 		return (
-			<div>
-				<Suspense fallback={<div>Loading Transact...</div>}>
-					<Transact id={session.user.id as number} />
-				</Suspense>
-				<Suspense fallback={<div>Loading Portfolio...</div>}>
-					<Portfolio id={session.user.id as number} />
-				</Suspense>
-				<Suspense fallback={<div>Loading Transactions...</div>}>
-					<Transactions id={session.user.id as number} />
-				</Suspense>
+			<div className="flex flex-col h-screen">
+				<div className="flex flex-1">
+					<div className="w-1/4">
+						<Suspense fallback={<div>Loading Transact...</div>}>
+							<Transact id={session.user.id as number} />
+						</Suspense>
+					</div>
+					<div className="w-1/2"></div>
+					<div className="w-1/4">
+						<Suspense fallback={<div>Loading Transactions...</div>}>
+							<Transactions id={session.user.id as number} />
+						</Suspense>
+					</div>
+				</div>
+				<div className="w-full">
+					<Suspense fallback={<div>Loading Portfolio...</div>}>
+						<Portfolio id={session.user.id as number} />
+					</Suspense>
+				</div>
 			</div>
 		);
 	}
