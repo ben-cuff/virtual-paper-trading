@@ -1,4 +1,5 @@
 import { fetchData } from "@/util/fetch-data";
+import { notFound } from "next/navigation";
 
 interface Transaction {
 	stock_symbol: string;
@@ -8,12 +9,21 @@ interface Transaction {
 	time: string;
 }
 
-type TransactionData = Transaction[];
+export default async function PortfolioPage({
+	params,
+}: {
+	params: { id: string };
+}) {
+	const { id } = params;
 
-export default async function Transactions({ id }: { id: number }) {
-	const result = await fetchData(
-		`${process.env.BASE_URL}/api/transactions?id=${id}`
-	);
+	let result;
+	try {
+		result = await fetchData(
+			`${process.env.BASE_URL}/api/transactions?id=${id}`
+		);
+	} catch (error) {
+		return notFound();
+	}
 
 	const transactionsList: TransactionData = result.transactions.map(
 		(item: Transaction) => {
@@ -31,10 +41,12 @@ export default async function Transactions({ id }: { id: number }) {
 	transactionsList.reverse();
 
 	return (
-		<div className="p-4 shadow-md border-gray-400 text-white h-96">
-			<h2 className="text-xl font-bold mb-2 text-center">Transactions</h2>
+		<div className="p-4 shadow-md border-gray-400 text-white overflow-y-auto">
+			<h2 className="text-xl font-bold mb-2 text-center">
+				Transactions for {result.user.name}
+			</h2>
 			{transactionsList.length > 0 ? (
-				<ul className="space-y-2 overflow-auto h-80 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
+				<ul className="space-y-2">
 					{transactionsList.map((transaction, index) => (
 						<li
 							key={index}
