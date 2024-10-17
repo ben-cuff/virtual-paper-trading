@@ -1,4 +1,5 @@
 import { fetchData } from "@/util/fetch-data";
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
 interface StockData {
@@ -67,21 +68,33 @@ export default function StockInput({ stockSymbol }: { stockSymbol: string }) {
 	};
 
 	return (
-		<div>
-			<p>
-				{stockSymbol}: {curPrice} (
-				<span
-					className={
-						curPrice - openingPrice < 0
-							? "text-red-500"
-							: "text-green-500"
-					}
+		<div className="flex items-center space-x-2">
+			<span className="flex items-center space-x-1">
+				<p className="text-lg font-semibold">
+					{stockSymbol}: {curPrice} (
+					<span
+						className={
+							curPrice - openingPrice < 0
+								? "text-red-500"
+								: "text-green-500"
+						}
+					>
+						{dayChange.toFixed(2)}%
+					</span>
+					)
+				</p>
+				<button
+					onClick={handleRefresh}
+					className="ml-2 bg-none border-none cursor-pointer"
 				>
-					{dayChange.toFixed(2)}%
-				</span>
-				)
-			</p>
-			<button onClick={handleRefresh}>Refresh</button>
+					<Image
+						src="Refresh_icon.svg"
+						alt="Refresh"
+						width={16}
+						height={16}
+					/>
+				</button>
+			</span>
 		</div>
 	);
 }

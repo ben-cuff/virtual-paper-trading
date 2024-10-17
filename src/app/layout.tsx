@@ -17,7 +17,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body>
 				<ClientProvider>
-					<div>
+					<div className="sticky top-0 z-50 bg-transparent backdrop-filter backdrop-blur-lg">
 						<NavBar />
 					</div>
 					{children}
