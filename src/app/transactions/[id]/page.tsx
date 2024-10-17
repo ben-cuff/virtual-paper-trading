@@ -9,7 +9,7 @@ interface Transaction {
 	time: string;
 }
 
-export default async function PortfolioPage({
+export default async function TransactionPage({
 	params,
 }: {
 	params: { id: string };
