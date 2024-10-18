@@ -101,7 +101,7 @@ export default async function Portfolio({ id }: { id: number }) {
 												$
 												{(
 													stock.shares_owned *
-													stock.average_price
+													stock.current_price
 												).toFixed(2)}
 											</td>
 											<td className="py-2 px-4">
