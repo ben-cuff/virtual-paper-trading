@@ -168,7 +168,7 @@ export default function Lookup() {
 							setSymbol(e.target.value.toUpperCase());
 							setData(null);
 						}}
-						className="flex-grow p-2 border rounded transition-all duration-300 ease-in-out"
+						className="w-1/3 p-2 border rounded transition-all duration-300 ease-in-out"
 						placeholder="Enter stock symbol"
 					/>
 					<button
@@ -179,7 +179,7 @@ export default function Lookup() {
 					</button>
 					<div className="ml-auto">
 						{data && data.s === "ok" ? (
-							<p className="text-md font-semibold text-white">
+							<p className="text-md font-semibold text-white text-xl">
 								{data.curPrice} (
 								<span
 									className={
