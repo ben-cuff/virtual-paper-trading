@@ -200,7 +200,7 @@ export default function Lookup() {
 						type="text"
 						value={symbol}
 						onChange={(e) => {
-							setSymbol(e.target.value);
+							setSymbol(e.target.value.toUpperCase());
 							setData(null);
 						}}
 						className="flex-grow p-2 border rounded transition-all duration-300 ease-in-out"
