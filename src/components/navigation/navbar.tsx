@@ -38,7 +38,17 @@ export default function NavBar() {
 										: ""
 								}`}
 							>
-								Transactions History
+								Transactions
+							</Link>
+							<Link
+								href={`/lookup`}
+								className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
+									currentRoute === `/lookup`
+										? "border-b-2 border-white"
+										: ""
+								}`}
+							>
+								Stock Lookup
 							</Link>
 							<Link
 								href="/leaderboard"

@@ -23,12 +23,8 @@ export async function GET(request: Request) {
 			}
 		);
 
-		// Check if the response is ok (status in the range 200-299)
-		if (!response.ok) {
-			throw new Error(`Error: ${response.status} ${response.statusText}`);
-		}
-
 		const data = await response.json();
+
 		return NextResponse.json(data, { status: 200 });
 	} catch (error) {
 		console.error(error);

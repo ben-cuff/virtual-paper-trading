@@ -2,8 +2,8 @@ export default function LoadingPortfolio() {
 	return (
 		<div className="p-4 shadow-md text-white shadow-top h-96 mt-1">
 			<h2 className="text-xl font-bold mb-2 text-center">Portfolio</h2>
-			<div className="mb-4 text-right">
-				<div className="bg-gray-700 h-6 w-48 mb-2 animate-pulse"></div>
+			<div className="mb-4">
+				<div className="bg-gray-700 h-6 w-48 mb-2 ml-auto animate-pulse"></div>
 			</div>
 			<div className="mb-4">
 				<table className="min-w-full rounded-lg shadow-sm text-sm">

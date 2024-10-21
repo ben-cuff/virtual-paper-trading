@@ -84,7 +84,7 @@ export default function Transact({ id }: { id: number }) {
 	};
 
 	return (
-		<div className="p-4 shadow-md border-gray-400 text-white h-96">
+		<div className="p-4 shadow-md text-white h-96">
 			<h1 className="text-xl font-bold text-center">Transact</h1>
 			<form onSubmit={handleStockSubmit} className="mb-4">
 				<div className="mb-4">
