@@ -20,9 +20,11 @@ export default function Lookup() {
 	const [symbol, setSymbol] = useState("");
 	const [data, setData] = useState<StockCandles | null>(null);
 	const [time, setTime] = useState("5D");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
+		setIsLoading(true);
 		const dateBegin = (() => {
 			const currentDate = new Date();
 			const timeMap: { [key: string]: () => Date } = {
@@ -70,6 +72,15 @@ export default function Lookup() {
 					fetchData(`api/stocks/getStockData?symbol=${symbol}`),
 				]);
 
+				console.log(JSON.stringify(stockData, null, 2));
+
+				if (stockData.s != "ok") {
+					alert(
+						"Error fetching stock data for this symbol. Please try again."
+					);
+					return;
+				}
+
 				const curPrice = stockData.last;
 				data = { ...candleData, curPrice };
 
@@ -84,17 +95,12 @@ export default function Lookup() {
 				}
 			} while (data.s === "no_data");
 
-			if (data.s == "error") {
-				alert(
-					"Error fetching stock data for this symbol. Please try again."
-				);
-				return;
-			}
-
 			setData(data);
 			console.log(`Stock data:`, data);
 		} catch (error) {
 			console.error("Error fetching stock data:", error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -204,66 +210,98 @@ export default function Lookup() {
 						)}
 					</div>
 				</div>
-				{data && data.s !== "error" && (
-					<div className="mt-2 flex flex-1">
-						<div className="w-11/12">
-							<CandlestickChart />
+				{isLoading ? (
+					<div className="flex justify-center items-center h-72 w-full">
+						<div className="w-11/12 h-full bg-gray-300 animate-pulse rounded-md">
+							<div className="h-full flex flex-col justify-between p-4">
+								<div className="w-full h-6 bg-gray-400 rounded"></div>
+								<div className="w-full h-6 bg-gray-400 rounded"></div>
+								<div className="w-full h-6 bg-gray-400 rounded"></div>
+								<div className="w-full h-6 bg-gray-400 rounded"></div>
+								<div className="w-full h-6 bg-gray-400 rounded"></div>
+							</div>
 						</div>
 						<div className="w-1/12 flex flex-col ml-4 h-72 justify-between">
-							<button
-								onClick={() => {
-									if (time !== "1D") setTime("1D");
-								}}
-								className={`p-2 rounded ${
-									time === "1D"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								1D
-							</button>
-							<button
-								onClick={() => setTime("5D")}
-								className={`p-2 rounded ${
-									time === "5D"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								5D
-							</button>
-							<button
-								onClick={() => setTime("3M")}
-								className={`p-2 rounded ${
-									time === "3M"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								3M
-							</button>
-							<button
-								onClick={() => setTime("1Y")}
-								className={`p-2 rounded ${
-									time === "1Y"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								1Y
-							</button>
-							<button
-								onClick={() => setTime("5Y")}
-								className={`p-2 rounded ${
-									time === "5Y"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								5Y
-							</button>
+							<div className="p-2 bg-gray-300 rounded animate-pulse">
+								&nbsp;
+							</div>
+							<div className="p-2 bg-gray-300 rounded animate-pulse">
+								&nbsp;
+							</div>
+							<div className="p-2 bg-gray-300 rounded animate-pulse">
+								&nbsp;
+							</div>
+							<div className="p-2 bg-gray-300 rounded animate-pulse">
+								&nbsp;
+							</div>
+							<div className="p-2 bg-gray-300 rounded animate-pulse">
+								&nbsp;
+							</div>
 						</div>
 					</div>
+				) : (
+					data &&
+					data.s !== "error" && (
+						<div className="mt-2 flex flex-1">
+							<div className="w-11/12">
+								<CandlestickChart />
+							</div>
+							<div className="w-1/12 flex flex-col ml-4 h-72 justify-between">
+								<button
+									onClick={() => {
+										if (time !== "1D") setTime("1D");
+									}}
+									className={`p-2 rounded ${
+										time === "1D"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									1D
+								</button>
+								<button
+									onClick={() => setTime("5D")}
+									className={`p-2 rounded ${
+										time === "5D"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									5D
+								</button>
+								<button
+									onClick={() => setTime("3M")}
+									className={`p-2 rounded ${
+										time === "3M"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									3M
+								</button>
+								<button
+									onClick={() => setTime("1Y")}
+									className={`p-2 rounded ${
+										time === "1Y"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									1Y
+								</button>
+								<button
+									onClick={() => setTime("5Y")}
+									className={`p-2 rounded ${
+										time === "5Y"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									5Y
+								</button>
+							</div>
+						</div>
+					)
 				)}
 			</form>
 		</div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { fetchData } from "@/util/fetch-data";
+import Image from "next/image";
 import { useState } from "react";
 
 import { Chart } from "react-google-charts";
@@ -21,9 +22,11 @@ export default function Lookup() {
 	const [data, setData] = useState<StockCandles | null>(null);
 	const [time, setTime] = useState("5D");
 	const [chartType, setChartType] = useState("Candlestick");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
+		setIsLoading(true);
 		const dateBegin = (() => {
 			const currentDate = new Date();
 			const timeMap: { [key: string]: () => Date } = {
@@ -71,6 +74,15 @@ export default function Lookup() {
 					fetchData(`api/stocks/getStockData?symbol=${symbol}`),
 				]);
 
+				console.log(JSON.stringify(stockData, null, 2));
+
+				if (stockData.s != "ok") {
+					alert(
+						"Error fetching stock data for this symbol. Please try again."
+					);
+					return;
+				}
+
 				const curPrice = stockData.last;
 				data = { ...candleData, curPrice };
 
@@ -85,16 +97,11 @@ export default function Lookup() {
 				}
 			} while (data.s === "no_data");
 
-			if (data.s == "error") {
-				alert(
-					"Error fetching stock data for this symbol. Please try again."
-				);
-				return;
-			}
-
 			setData(data);
 		} catch (error) {
 			console.error("Error fetching stock data:", error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -219,99 +226,136 @@ export default function Lookup() {
 						Lookup
 					</button>
 					{data && data.s === "ok" && (
-						<p className="text-md font-semibold text-white ml-auto text-lg">
-							{data.curPrice} (
-							<span
-								className={
-									data.curPrice - data.o[0] < 0
-										? "text-red-500"
-										: "text-green-500"
-								}
+						<div className="flex items-center ml-auto">
+							<p className="text-md font-semibold text-white text-lg">
+								{data.curPrice} (
+								<span
+									className={
+										data.curPrice - data.o[0] < 0
+											? "text-red-500"
+											: "text-green-500"
+									}
+								>
+									{(
+										((data.curPrice - data.o[0]) /
+											data.o[0]) *
+										100
+									).toFixed(2)}
+									%
+								</span>
+								)
+							</p>
+							<button
+								onClick={async (e) => {
+									e.preventDefault();
+									const refreshButton = e.currentTarget;
+									refreshButton.classList.add(
+										"animate-spin-reverse"
+									);
+									await handleSubmit(e);
+									setTimeout(() => {
+										refreshButton.classList.remove(
+											"animate-spin-reverse"
+										);
+									}, 1000);
+								}}
+								className="ml-2"
 							>
-								{(
-									((data.curPrice - data.o[0]) / data.o[0]) *
-									100
-								).toFixed(2)}
-								%
-							</span>
-							)
-						</p>
+								<Image
+									src="Refresh_icon.svg"
+									alt="Refresh icon"
+									width="25"
+									height="25"
+								/>
+							</button>
+						</div>
 					)}
 				</div>
-				{data && data.s !== "error" && (
-					<div className="mt-2 flex flex-1">
-						<div className="w-11/12">
-							{chartType === "Candlestick" ? (
-								<CandlestickChart />
-							) : (
-								<MountainLineChart />
-							)}
-						</div>
-						<div className="w-1/12 flex flex-col ml-4 justify-between">
-							<select
-								value={chartType}
-								onChange={(e) => setChartType(e.target.value)}
-								className="p-2 rounded bg-gray-200 transition-all duration-300 ease-in-out"
-							>
-								<option value="Candlestick">Candlestick</option>
-								<option value="MountainLine">
-									Mountain Line
-								</option>
-							</select>
-							<button
-								onClick={() => {
-									if (time !== "1D") setTime("1D");
-								}}
-								className={`p-2 rounded ${
-									time === "1D"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								1D
-							</button>
-							<button
-								onClick={() => setTime("5D")}
-								className={`p-2 rounded ${
-									time === "5D"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								5D
-							</button>
-							<button
-								onClick={() => setTime("3M")}
-								className={`p-2 rounded ${
-									time === "3M"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								3M
-							</button>
-							<button
-								onClick={() => setTime("1Y")}
-								className={`p-2 rounded ${
-									time === "1Y"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								1Y
-							</button>
-							<button
-								onClick={() => setTime("5Y")}
-								className={`p-2 rounded ${
-									time === "5Y"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								5Y
-							</button>
-						</div>
+				{isLoading ? (
+					<div className="flex justify-center items-center h-64">
+						<div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
 					</div>
+				) : (
+					data &&
+					data.s !== "error" && (
+						<div className="mt-2 flex flex-1">
+							<div className="w-11/12">
+								{chartType === "Candlestick" ? (
+									<CandlestickChart />
+								) : (
+									<MountainLineChart />
+								)}
+							</div>
+							<div className="w-1/12 flex flex-col ml-4 justify-between">
+								<select
+									value={chartType}
+									onChange={(e) =>
+										setChartType(e.target.value)
+									}
+									className="p-2 rounded bg-gray-200 transition-all duration-300 ease-in-out"
+								>
+									<option value="Candlestick">
+										Candlestick
+									</option>
+									<option value="MountainLine">
+										Mountain Line
+									</option>
+								</select>
+								<button
+									onClick={() => {
+										if (time !== "1D") setTime("1D");
+									}}
+									className={`p-2 rounded ${
+										time === "1D"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									1D
+								</button>
+								<button
+									onClick={() => setTime("5D")}
+									className={`p-2 rounded ${
+										time === "5D"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									5D
+								</button>
+								<button
+									onClick={() => setTime("3M")}
+									className={`p-2 rounded ${
+										time === "3M"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									3M
+								</button>
+								<button
+									onClick={() => setTime("1Y")}
+									className={`p-2 rounded ${
+										time === "1Y"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									1Y
+								</button>
+								<button
+									onClick={() => setTime("5Y")}
+									className={`p-2 rounded ${
+										time === "5Y"
+											? "bg-blue-500 text-white"
+											: "bg-gray-200"
+									} transition-all duration-300 ease-in-out`}
+								>
+									5Y
+								</button>
+							</div>
+						</div>
+					)
 				)}
 			</form>
 		</div>
