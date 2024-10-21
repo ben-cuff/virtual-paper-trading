@@ -13,6 +13,7 @@ interface StockCandles {
 	l: number[];
 	c: number[];
 	v: number[];
+	curPrice: number;
 }
 
 export default function Lookup() {
@@ -62,9 +63,15 @@ export default function Lookup() {
 			let dateBeginTemp = dateBegin;
 
 			do {
-				data = await fetchData(
-					`api/stocks/getCandle?symbol=${symbol}&resolution=${resolution}&from=${dateBeginTemp}&to=${dateEnd}`
-				);
+				const [candleData, stockData] = await Promise.all([
+					fetchData(
+						`api/stocks/getCandle?symbol=${symbol}&resolution=${resolution}&from=${dateBeginTemp}&to=${dateEnd}`
+					),
+					fetchData(`api/stocks/getStockData?symbol=${symbol}`),
+				]);
+
+				const curPrice = stockData.last;
+				data = { ...candleData, curPrice };
 
 				if (data.s === "no_data") {
 					dateBeginTemp = new Date(
@@ -170,6 +177,32 @@ export default function Lookup() {
 					>
 						Lookup
 					</button>
+					<div className="ml-auto">
+						{data && data.s === "ok" ? (
+							<p className="text-md font-semibold text-white">
+								{data.curPrice} (
+								<span
+									className={
+										data.curPrice - data.o[0] < 0
+											? "text-red-500"
+											: "text-green-500"
+									}
+								>
+									{(
+										((data.curPrice - data.o[0]) /
+											data.o[0]) *
+										100
+									).toFixed(2)}
+									%
+								</span>
+								)
+							</p>
+						) : (
+							<p className="text-md font-semibold text-white">
+								&nbsp;
+							</p>
+						)}
+					</div>
 				</div>
 				{data && data.s !== "error" && (
 					<div className="mt-2 flex flex-1">

@@ -13,6 +13,7 @@ interface StockCandles {
 	l: number[];
 	c: number[];
 	v: number[];
+	curPrice: number;
 }
 
 export default function Lookup() {
@@ -63,9 +64,15 @@ export default function Lookup() {
 			let dateBeginTemp = dateBegin;
 
 			do {
-				data = await fetchData(
-					`api/stocks/getCandle?symbol=${symbol}&resolution=${resolution}&from=${dateBeginTemp}&to=${dateEnd}`
-				);
+				const [candleData, stockData] = await Promise.all([
+					fetchData(
+						`api/stocks/getCandle?symbol=${symbol}&resolution=${resolution}&from=${dateBeginTemp}&to=${dateEnd}`
+					),
+					fetchData(`api/stocks/getStockData?symbol=${symbol}`),
+				]);
+
+				const curPrice = stockData.last;
+				data = { ...candleData, curPrice };
 
 				if (data.s === "no_data") {
 					dateBeginTemp = new Date(
@@ -86,7 +93,6 @@ export default function Lookup() {
 			}
 
 			setData(data);
-			console.log(`Stock data:`, data);
 		} catch (error) {
 			console.error("Error fetching stock data:", error);
 		}
@@ -187,7 +193,7 @@ export default function Lookup() {
 	};
 
 	return (
-		<div className="p-4 shadow-md max-h-screen">
+		<div className="p-4 max-h-screen">
 			<form
 				onSubmit={handleSubmit}
 				className="transition-all duration-300 ease-in-out"
@@ -212,6 +218,25 @@ export default function Lookup() {
 					>
 						Lookup
 					</button>
+					{data && data.s === "ok" && (
+						<p className="text-md font-semibold text-white ml-auto text-lg">
+							{data.curPrice} (
+							<span
+								className={
+									data.curPrice - data.o[0] < 0
+										? "text-red-500"
+										: "text-green-500"
+								}
+							>
+								{(
+									((data.curPrice - data.o[0]) / data.o[0]) *
+									100
+								).toFixed(2)}
+								%
+							</span>
+							)
+						</p>
+					)}
 				</div>
 				{data && data.s !== "error" && (
 					<div className="mt-2 flex flex-1">
@@ -223,6 +248,16 @@ export default function Lookup() {
 							)}
 						</div>
 						<div className="w-1/12 flex flex-col ml-4 justify-between">
+							<select
+								value={chartType}
+								onChange={(e) => setChartType(e.target.value)}
+								className="p-2 rounded bg-gray-200 transition-all duration-300 ease-in-out"
+							>
+								<option value="Candlestick">Candlestick</option>
+								<option value="MountainLine">
+									Mountain Line
+								</option>
+							</select>
 							<button
 								onClick={() => {
 									if (time !== "1D") setTime("1D");
@@ -274,26 +309,6 @@ export default function Lookup() {
 								} transition-all duration-300 ease-in-out`}
 							>
 								5Y
-							</button>
-							<button
-								onClick={() => setChartType("Candlestick")}
-								className={`p-2 rounded ${
-									chartType === "Candlestick"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								Candlestick
-							</button>
-							<button
-								onClick={() => setChartType("MountainLine")}
-								className={`p-2 rounded ${
-									chartType === "MountainLine"
-										? "bg-blue-500 text-white"
-										: "bg-gray-200"
-								} transition-all duration-300 ease-in-out`}
-							>
-								Mountain Line
 							</button>
 						</div>
 					</div>
