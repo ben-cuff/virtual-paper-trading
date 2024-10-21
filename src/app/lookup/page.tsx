@@ -15,10 +15,11 @@ interface StockCandles {
 	v: number[];
 }
 
-export default function LookupPage() {
+export default function Lookup() {
 	const [symbol, setSymbol] = useState("");
 	const [data, setData] = useState<StockCandles | null>(null);
 	const [time, setTime] = useState("5D");
+	const [chartType, setChartType] = useState("Candlestick");
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -51,7 +52,7 @@ export default function LookupPage() {
 		try {
 			const resolutions: { [key: string]: string } = {
 				"1D": "1",
-				"5D": "30",
+				"5D": "20",
 				"3M": "D",
 				"1Y": "2D",
 				"5Y": "W",
@@ -77,6 +78,13 @@ export default function LookupPage() {
 				}
 			} while (data.s === "no_data");
 
+			if (data.s == "error") {
+				alert(
+					"Error fetching stock data for this symbol. Please try again."
+				);
+				return;
+			}
+
 			setData(data);
 			console.log(`Stock data:`, data);
 		} catch (error) {
@@ -88,7 +96,9 @@ export default function LookupPage() {
 		["Date", "Low", "Open", "Close", "High"],
 		...(data && data.s == "ok"
 			? data.t.map((timestamp, index) => [
-					new Date(timestamp * 1000).toLocaleDateString(),
+					time === "1D"
+						? new Date(timestamp * 1000).toLocaleTimeString()
+						: new Date(timestamp * 1000).toLocaleDateString(),
 					data.l[index],
 					data.o[index],
 					data.c[index],
@@ -104,107 +114,191 @@ export default function LookupPage() {
 			fallingColor: { strokeWidth: 0, fill: "#a52714" },
 			risingColor: { strokeWidth: 0, fill: "#0f9d58" },
 		},
+		backgroundColor: "#E5E7EB",
 	};
 
 	const CandlestickChart = () => {
+		const minPrice = Math.min(...(data?.l || []));
+		const maxPrice = Math.max(...(data?.h || []));
+		const rangePadding = (maxPrice - minPrice) * 0.1;
+
+		const adjustedOptions = {
+			...options,
+			vAxis: {
+				viewWindow: {
+					min: minPrice - rangePadding,
+					max: maxPrice + rangePadding,
+				},
+			},
+		};
+
 		return (
 			<div>
 				<Chart
 					chartType="CandlestickChart"
 					width="100%"
-					height="400px"
+					height="550px"
 					data={chartData}
-					options={options}
+					options={adjustedOptions}
+				/>
+			</div>
+		);
+	};
+
+	const MountainLineChart = () => {
+		const lineChartData = [
+			["Date", "Close"],
+			...(data && data.s == "ok"
+				? data.t.map((timestamp, index) => [
+						time === "1D"
+							? new Date(timestamp * 1000).toLocaleTimeString()
+							: new Date(timestamp * 1000).toLocaleDateString(),
+						data.c[index],
+				  ])
+				: []),
+		];
+
+		const lineChartOptions = {
+			title: "Stock Prices",
+			legend: "none",
+			backgroundColor: "#E5E7EB",
+			hAxis: {
+				title: "Date",
+			},
+			vAxis: {
+				title: "Price",
+			},
+			series: {
+				0: { areaOpacity: 0.3 },
+			},
+		};
+
+		return (
+			<div>
+				<Chart
+					chartType="AreaChart"
+					width="100%"
+					height="550px"
+					data={lineChartData}
+					options={lineChartOptions}
 				/>
 			</div>
 		);
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit}
-			className="mb-5 p-4 rounded shadow-md transition-all duration-300 ease-in-out"
-		>
-			<div className="mb-4">
-				<label className="block text-gray-200 font-bold mb-2">
-					Stock Symbol:
-				</label>
-				<input
-					type="text"
-					value={symbol}
-					onChange={(e) => {
-						setSymbol(e.target.value);
-						setData(null);
-					}}
-					className="w-full p-2 border rounded transition-all duration-300 ease-in-out"
-					placeholder="Enter stock symbol"
-				/>
-			</div>
-			<button
-				type="submit"
-				className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-300 ease-in-out"
+		<div className="p-4 shadow-md max-h-screen">
+			<form
+				onSubmit={handleSubmit}
+				className="transition-all duration-300 ease-in-out"
 			>
-				Lookup
-			</button>
-			{data && data.s !== "error" && (
-				<div className="mt-5">
-					<CandlestickChart />
-					<div className="mt-5 flex justify-around">
-						<button
-							onClick={() => {
-								if (time !== "1D") setTime("1D");
-							}}
-							className={`p-2 rounded ${
-								time === "1D"
-									? "bg-blue-500 text-white"
-									: "bg-gray-200"
-							} transition-all duration-300 ease-in-out`}
-						>
-							1D
-						</button>
-						<button
-							onClick={() => setTime("5D")}
-							className={`p-2 rounded ${
-								time === "5D"
-									? "bg-blue-500 text-white"
-									: "bg-gray-200"
-							} transition-all duration-300 ease-in-out`}
-						>
-							5D
-						</button>
-						<button
-							onClick={() => setTime("3M")}
-							className={`p-2 rounded ${
-								time === "3M"
-									? "bg-blue-500 text-white"
-									: "bg-gray-200"
-							} transition-all duration-300 ease-in-out`}
-						>
-							3M
-						</button>
-						<button
-							onClick={() => setTime("1Y")}
-							className={`p-2 rounded ${
-								time === "1Y"
-									? "bg-blue-500 text-white"
-									: "bg-gray-200"
-							} transition-all duration-300 ease-in-out`}
-						>
-							1Y
-						</button>
-						<button
-							onClick={() => setTime("ALL")}
-							className={`p-2 rounded ${
-								time === "5Y"
-									? "bg-blue-500 text-white"
-									: "bg-gray-200"
-							} transition-all duration-300 ease-in-out`}
-						>
-							5Y
-						</button>
-					</div>
+				<div className="mb-2 flex items-center">
+					<label className="block text-gray-200 font-bold mr-2">
+						Stock Symbol:
+					</label>
+					<input
+						type="text"
+						value={symbol}
+						onChange={(e) => {
+							setSymbol(e.target.value);
+							setData(null);
+						}}
+						className="flex-grow p-2 border rounded transition-all duration-300 ease-in-out"
+						placeholder="Enter stock symbol"
+					/>
+					<button
+						type="submit"
+						className="ml-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-300 ease-in-out"
+					>
+						Lookup
+					</button>
 				</div>
-			)}
-		</form>
+				{data && data.s !== "error" && (
+					<div className="mt-2 flex flex-1">
+						<div className="w-11/12">
+							{chartType === "Candlestick" ? (
+								<CandlestickChart />
+							) : (
+								<MountainLineChart />
+							)}
+						</div>
+						<div className="w-1/12 flex flex-col ml-4 justify-between">
+							<button
+								onClick={() => {
+									if (time !== "1D") setTime("1D");
+								}}
+								className={`p-2 rounded ${
+									time === "1D"
+										? "bg-blue-500 text-white"
+										: "bg-gray-200"
+								} transition-all duration-300 ease-in-out`}
+							>
+								1D
+							</button>
+							<button
+								onClick={() => setTime("5D")}
+								className={`p-2 rounded ${
+									time === "5D"
+										? "bg-blue-500 text-white"
+										: "bg-gray-200"
+								} transition-all duration-300 ease-in-out`}
+							>
+								5D
+							</button>
+							<button
+								onClick={() => setTime("3M")}
+								className={`p-2 rounded ${
+									time === "3M"
+										? "bg-blue-500 text-white"
+										: "bg-gray-200"
+								} transition-all duration-300 ease-in-out`}
+							>
+								3M
+							</button>
+							<button
+								onClick={() => setTime("1Y")}
+								className={`p-2 rounded ${
+									time === "1Y"
+										? "bg-blue-500 text-white"
+										: "bg-gray-200"
+								} transition-all duration-300 ease-in-out`}
+							>
+								1Y
+							</button>
+							<button
+								onClick={() => setTime("5Y")}
+								className={`p-2 rounded ${
+									time === "5Y"
+										? "bg-blue-500 text-white"
+										: "bg-gray-200"
+								} transition-all duration-300 ease-in-out`}
+							>
+								5Y
+							</button>
+							<button
+								onClick={() => setChartType("Candlestick")}
+								className={`p-2 rounded ${
+									chartType === "Candlestick"
+										? "bg-blue-500 text-white"
+										: "bg-gray-200"
+								} transition-all duration-300 ease-in-out`}
+							>
+								Candlestick
+							</button>
+							<button
+								onClick={() => setChartType("MountainLine")}
+								className={`p-2 rounded ${
+									chartType === "MountainLine"
+										? "bg-blue-500 text-white"
+										: "bg-gray-200"
+								} transition-all duration-300 ease-in-out`}
+							>
+								Mountain Line
+							</button>
+						</div>
+					</div>
+				)}
+			</form>
+		</div>
 	);
 }
