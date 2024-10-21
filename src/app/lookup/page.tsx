@@ -203,12 +203,12 @@ export default function Lookup() {
 							setSymbol(e.target.value.toUpperCase());
 							setData(null);
 						}}
-						className="flex-grow p-2 border rounded transition-all duration-300 ease-in-out"
+						className="w-1/6 p-2 border rounded transition-all duration-300 ease-in-out"
 						placeholder="Enter stock symbol"
 					/>
 					<button
 						type="submit"
-						className="ml-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-300 ease-in-out"
+						className="ml-2 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-300 ease-in-out"
 					>
 						Lookup
 					</button>
