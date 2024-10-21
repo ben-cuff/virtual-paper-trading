@@ -1,6 +1,7 @@
 import LandingPage from "@/components/landing";
 import LoadingPortfolio from "@/components/loading/loading-portfolio";
 import LoadingTransactions from "@/components/loading/loading-transactions";
+import Lookup from "@/components/lookup";
 import Portfolio from "@/components/portfolio";
 import Transact from "@/components/transact";
 import Transactions from "@/components/transactions";
@@ -18,7 +19,9 @@ export default async function Home() {
 					<div className="w-1/4">
 						<Transact id={session.user.id as number} />
 					</div>
-					<div className="w-1/2"></div>
+					<div className="w-1/2">
+						<Lookup />
+					</div>
 					<div className="w-1/4">
 						<Suspense fallback={<LoadingTransactions />}>
 							<Transactions id={session.user.id as number} />

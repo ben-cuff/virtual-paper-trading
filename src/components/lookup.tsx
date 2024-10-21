@@ -106,27 +106,25 @@ export default function Lookup() {
 		},
 	};
 
-	const CandlestickChart = () => {
-		return (
-			<div>
-				<Chart
-					chartType="CandlestickChart"
-					width="100%"
-					height="400px"
-					data={chartData}
-					options={options}
-				/>
-			</div>
-		);
-	};
+	const CandlestickChart = () => (
+		<div className="w-full h-96">
+			<Chart
+				chartType="CandlestickChart"
+				width="100%"
+				height="100%"
+				data={chartData}
+				options={options}
+			/>
+		</div>
+	);
 
 	return (
 		<form
 			onSubmit={handleSubmit}
 			className="mb-5 p-4 rounded shadow-md transition-all duration-300 ease-in-out"
 		>
-			<div className="mb-4">
-				<label className="block text-gray-200 font-bold mb-2">
+			<div className="mb-4 flex items-center">
+				<label className="block text-gray-200 font-bold mr-2">
 					Stock Symbol:
 				</label>
 				<input
@@ -136,20 +134,22 @@ export default function Lookup() {
 						setSymbol(e.target.value);
 						setData(null);
 					}}
-					className="w-full p-2 border rounded transition-all duration-300 ease-in-out"
+					className="flex-grow p-2 border rounded transition-all duration-300 ease-in-out"
 					placeholder="Enter stock symbol"
 				/>
+				<button
+					type="submit"
+					className="ml-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-300 ease-in-out"
+				>
+					Lookup
+				</button>
 			</div>
-			<button
-				type="submit"
-				className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-300 ease-in-out"
-			>
-				Lookup
-			</button>
 			{data && data.s !== "error" && (
-				<div className="mt-5">
-					<CandlestickChart />
-					<div className="mt-5 flex justify-around">
+				<div className="mt-5 flex">
+					<div className="w-11/12">
+						<CandlestickChart />
+					</div>
+					<div className="w-1/12 flex flex-col justify-around ml-4">
 						<button
 							onClick={() => {
 								if (time !== "1D") setTime("1D");
@@ -193,7 +193,7 @@ export default function Lookup() {
 							1Y
 						</button>
 						<button
-							onClick={() => setTime("ALL")}
+							onClick={() => setTime("5Y")}
 							className={`p-2 rounded ${
 								time === "5Y"
 									? "bg-blue-500 text-white"
