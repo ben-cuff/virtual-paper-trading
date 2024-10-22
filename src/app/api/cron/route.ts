@@ -25,7 +25,7 @@ interface PortfolioData {
 
 export default async function handler(req: NextRequest) {
 	const response = await updateLeaderboard();
-
+}
 
 async function updateLeaderboard() {
 	try {
