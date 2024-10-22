@@ -45,18 +45,21 @@ This project is built using the following tech stack:
     npm install
     ```
 4. Create a `.env.local` file to store your environment variables:
-   `bash
- touch .env.local
- `
+    ```bash
+    touch .env.local
+    ```
+
+````
 
 ## Usage
 
 1. Start the application:
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   npm run dev
+   ```
 2. Open your browser and navigate to `http://localhost:3000`.
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+````
