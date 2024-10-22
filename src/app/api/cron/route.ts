@@ -1,8 +1,6 @@
 import { fetchData } from "@/util/fetch-data";
 
-export const config = {
-	runtime: "edge",
-};
+export const runtime = "edge";
 
 interface User {
 	name: string;
@@ -24,7 +22,7 @@ interface PortfolioData {
 }
 
 export default async function handler(req: NextRequest) {
-	const response = await updateLeaderboard();
+	await updateLeaderboard();
 }
 
 async function updateLeaderboard() {
