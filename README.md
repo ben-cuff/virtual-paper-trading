@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Virtual Paper Trading
 
-## Getting Started
+Welcome to the Virtual Paper Trading project! This application allows users to simulate trading in a risk-free environment using virtual currency. You can view the website at [https://www.virtualpapertrading.com](https://www.virtualpapertrading.com)
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project is built using the following technologies:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project is built using the following tech stack:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+-   **Programming Language**: TypeScript
+-   **Web Framework**: Next.js + React
+-   **APIs**:
+    -   [www.marketdata.app](https://www.marketdata.app) for stock information
+    -   [www.api.virtualpapertrading.com](https://www.api.virtualpapertrading.com) for saving user information
+-   **Backend**: Python FastAPI for the main backend and routes using NextJS built in API routes
+-   **Database**: PostgreSQL
+-   **Authentication**: Auth.js
+-   **CSS Framework**: TailwindCSS
+-   **Host**: Vercel
+-   **Formatting**: prettier
+-   **Linting**: ESLint
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+-   **Real-time Market Data**: Get up-to-date information on stock prices and market trends.
+-   **Portfolio Management**: Track your virtual investments and monitor your portfolio's performance.
+-   **Trade Simulation**: Execute buy and sell orders without any financial risk.
+-   **Analytics and Reports**: Generate graphs to see a stocks change over time.
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/ben-cuff/virtual-paper-trading.git
+    ```
+2. Navigate to the project directory:
+    ```bash
+    cd virtual-paper-trading
+    ```
+3. Install dependencies:
+    ```bash
+    npm install
+    ```
+4. Create a `.env.local` file to store your environment variables:
+    ```bash
+    touch .env.local
+    ```
 
-## Deploy on Vercel
+## Usage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Start the application:
+   ```bash
+   npm run dev
+   ```
+2. Open your browser and navigate to `http://localhost:3000`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.

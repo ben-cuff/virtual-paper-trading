@@ -29,7 +29,7 @@ export default function Lookup() {
 			const currentDate = new Date();
 			const timeMap: { [key: string]: () => Date } = {
 				"1D": () =>
-					new Date(currentDate.setDate(currentDate.getDate() - 1)),
+					new Date(currentDate.setDate(currentDate.getDate())),
 				"5D": () =>
 					new Date(currentDate.setDate(currentDate.getDate() - 5)),
 				"3M": () =>
@@ -72,8 +72,6 @@ export default function Lookup() {
 					fetchData(`api/stocks/getStockData?symbol=${symbol}`),
 				]);
 
-				console.log(JSON.stringify(stockData, null, 2));
-
 				if (stockData.s != "ok") {
 					alert(
 						"Error fetching stock data for this symbol. Please try again."
@@ -96,7 +94,6 @@ export default function Lookup() {
 			} while (data.s === "no_data");
 
 			setData(data);
-			console.log(`Stock data:`, data);
 		} catch (error) {
 			console.error("Error fetching stock data:", error);
 		} finally {
