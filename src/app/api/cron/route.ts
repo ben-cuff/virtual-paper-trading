@@ -18,11 +18,8 @@ interface PortfolioData {
 	total_worth: number;
 	portfolio: Stock[];
 }
-export default async function handler() {
-	await updateLeaderboard();
-}
 
-export async function updateLeaderboard() {
+export default async function updateLeaderboard() {
 	try {
 		const users: User[] = await fetchData(
 			`${process.env.BASE_URL}/api/users`
