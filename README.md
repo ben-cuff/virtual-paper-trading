@@ -49,8 +49,6 @@ This project is built using the following tech stack:
     touch .env.local
     ```
 
-````
-
 ## Usage
 
 1. Start the application:
@@ -62,4 +60,3 @@ This project is built using the following tech stack:
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-````
