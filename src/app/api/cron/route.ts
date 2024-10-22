@@ -21,7 +21,7 @@ interface PortfolioData {
 	portfolio: Stock[];
 }
 
-export default async function handler(req: NextRequest) {
+export default async function handler() {
 	await updateLeaderboard();
 }
 
