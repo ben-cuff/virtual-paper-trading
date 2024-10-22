@@ -1,5 +1,9 @@
 import { fetchData } from "@/util/fetch-data";
 
+export const config = {
+	runtime: "edge",
+};
+
 interface User {
 	name: string;
 	balance: number;
@@ -19,7 +23,11 @@ interface PortfolioData {
 	portfolio: Stock[];
 }
 
-export async function updateLeaderboard() {
+export default async function handler(req: NextRequest) {
+	const response = await updateLeaderboard();
+
+
+async function updateLeaderboard() {
 	try {
 		const users: User[] = await fetchData(
 			`${process.env.BASE_URL}/api/users`
