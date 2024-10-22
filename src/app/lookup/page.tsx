@@ -31,7 +31,7 @@ export default function Lookup() {
 			const currentDate = new Date();
 			const timeMap: { [key: string]: () => Date } = {
 				"1D": () =>
-					new Date(currentDate.setDate(currentDate.getDate() - 1)),
+					new Date(currentDate.setDate(currentDate.getDate())),
 				"5D": () =>
 					new Date(currentDate.setDate(currentDate.getDate() - 5)),
 				"3M": () =>
@@ -124,8 +124,8 @@ export default function Lookup() {
 		title: "Stock Prices",
 		legend: "none",
 		candlestick: {
-			fallingColor: { strokeWidth: 0, fill: "#a52714" },
-			risingColor: { strokeWidth: 0, fill: "#0f9d58" },
+			fallingColor: { strokeWidth: 0, fill: "#0f9d58" },
+			risingColor: { strokeWidth: 0, fill: "#a52714" },
 		},
 		backgroundColor: "#E5E7EB",
 	};
@@ -298,7 +298,7 @@ export default function Lookup() {
 										Candlestick
 									</option>
 									<option value="MountainLine">
-										Mountain Line
+										Mountain
 									</option>
 								</select>
 								<button

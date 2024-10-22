@@ -29,7 +29,7 @@ export default function Lookup() {
 			const currentDate = new Date();
 			const timeMap: { [key: string]: () => Date } = {
 				"1D": () =>
-					new Date(currentDate.setDate(currentDate.getDate() - 1)),
+					new Date(currentDate.setDate(currentDate.getDate())),
 				"5D": () =>
 					new Date(currentDate.setDate(currentDate.getDate() - 5)),
 				"3M": () =>
