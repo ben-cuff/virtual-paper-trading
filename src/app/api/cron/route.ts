@@ -19,7 +19,7 @@ interface PortfolioData {
 	portfolio: Stock[];
 }
 
-export default async function updateLeaderboard() {
+export async function updateLeaderboard() {
 	try {
 		const users: User[] = await fetchData(
 			`${process.env.BASE_URL}/api/users`
