@@ -1,5 +1,4 @@
 import { fetchData } from "@/util/fetch-data";
-import { NextApiRequest, NextApiResponse } from "next";
 
 interface User {
 	name: string;
@@ -19,10 +18,7 @@ interface PortfolioData {
 	total_worth: number;
 	portfolio: Stock[];
 }
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse
-) {
+export default async function handler() {
 	await updateLeaderboard();
 }
 
