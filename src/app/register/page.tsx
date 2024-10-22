@@ -47,7 +47,7 @@ export default function Register() {
 
 		if (!response.ok) {
 			const errorData = await response.json();
-			alert(`Error: ${errorData.message}`);
+			alert(`Error: ${errorData.detail}`);
 			return;
 		}
 

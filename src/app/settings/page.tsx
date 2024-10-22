@@ -30,7 +30,6 @@ export default function SettingsPage() {
 				}
 			);
 			if (response.ok) {
-				console.log("Account reset successfully");
 				router.push("/");
 			} else {
 				console.error("Failed to reset account");
@@ -55,7 +54,6 @@ export default function SettingsPage() {
 				}
 			);
 			if (response.ok) {
-				console.log("Account deleted successfully");
 				await signOut();
 				router.push("/");
 			} else {

@@ -74,8 +74,6 @@ export default function Lookup() {
 					fetchData(`api/stocks/getStockData?symbol=${symbol}`),
 				]);
 
-				console.log(JSON.stringify(stockData, null, 2));
-
 				if (stockData.s != "ok") {
 					alert(
 						"Error fetching stock data for this symbol. Please try again."
