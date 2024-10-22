@@ -21,10 +21,6 @@ interface PortfolioData {
 	portfolio: Stock[];
 }
 
-export default async function handler() {
-	await updateLeaderboard();
-}
-
 async function updateLeaderboard() {
 	try {
 		const users: User[] = await fetchData(
@@ -75,3 +71,6 @@ async function updateLeaderboard() {
 		console.error("Error updating leaderboard:", error);
 	}
 }
+
+// Directly call updateLeaderboard
+updateLeaderboard();
