@@ -2,6 +2,11 @@ import { fetchData } from "@/util/fetch-data";
 
 export const runtime = "edge";
 
+interface User {
+	name: string;
+	balance: number;
+}
+
 interface Stock {
 	stock_symbol: string;
 	shares_owned: number;
