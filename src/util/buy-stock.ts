@@ -4,7 +4,6 @@ export default async function buyStock(
 	quantity: number,
 	price: number
 ) {
-	console.log(`${process.env.NEXT_PUBLIC_BASE_URL}/stocks/buy?id=${id}`);
 	const response = await fetch(
 		`${process.env.NEXT_PUBLIC_BASE_URL}/api/stocks/buy?id=${id}`,
 		{
