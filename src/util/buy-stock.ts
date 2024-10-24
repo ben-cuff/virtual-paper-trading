@@ -4,22 +4,23 @@ export default async function buyStock(
 	quantity: number,
 	price: number
 ) {
+	console.log(`${process.env.NEXT_PUBLIC_BASE_URL}/stocks/buy?id=${id}`);
 	const response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/buy/${id}`,
-        {
-            method: "POST",
-            headers: new Headers({
-                "Content-Type": "application/json"
-            }),
-            body: JSON.stringify({
-                stock_symbol: symbol,
-                quantity: quantity,
-                price_per_share: price,
-            })
-        }
-    );
-    
-    const data = await response.json();
+		`${process.env.NEXT_PUBLIC_BASE_URL}/api/stocks/buy?id=${id}`,
+		{
+			method: "POST",
+			headers: new Headers({
+				"Content-Type": "application/json",
+			}),
+			body: JSON.stringify({
+				symbol: symbol,
+				quantity: quantity,
+				price: price,
+			}),
+		}
+	);
 
-    return data;
+	const data = await response.json();
+
+	return data;
 }

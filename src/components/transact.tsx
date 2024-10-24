@@ -9,8 +9,8 @@ import StockInput from "./stock-input";
 export default function Transact({ id }: { id: number }) {
 	const [stockSymbol, setStockSymbol] = useState("");
 	const [transactionType, setTransactionType] = useState("buy");
-	const [shares, setShares] = useState();
-	const [dollars, setDollars] = useState();
+	const [shares, setShares] = useState(0);
+	const [dollars, setDollars] = useState(0);
 	const [toggle, setToggle] = useState("shares");
 	const [stockDataToggle, setStockDataToggle] = useState(false);
 
