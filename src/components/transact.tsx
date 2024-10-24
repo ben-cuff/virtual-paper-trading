@@ -32,6 +32,11 @@ export default function Transact({ id }: { id: number }) {
 			return;
 		}
 
+		if (shares < 0 || dollars < 0) {
+			alert("Share/dollars cannot be less than 0")
+			return;
+		}
+
 		let stockData;
 
 		try {
