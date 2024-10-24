@@ -11,6 +11,7 @@ export async function POST(request: Request) {
 				method: "POST",
 				headers: new Headers({
 					"Content-Type": "application/json",
+					"x-api-key": `${process.env.X_API_KEY}`,
 				}),
 				body: JSON.stringify({
 					stock_symbol: symbol,

@@ -18,6 +18,7 @@ export async function DELETE(request: Request) {
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
+					"x-api-key": `${process.env.X_API_KEY}`,
 				},
 			}
 		);

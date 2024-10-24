@@ -82,6 +82,7 @@ async function getBalance(id: number) {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
+				"x-api-key": `${process.env.X_API_KEY}`,
 			},
 		}
 	);
