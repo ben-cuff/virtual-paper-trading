@@ -12,6 +12,12 @@ export async function GET(request: Request) {
 	}
 
 	try {
+		const today = new Date();
+		const lastYear = new Date();
+		lastYear.setFullYear(today.getFullYear() - 1);
+
+		const from = lastYear.toISOString().split("T")[0];
+		const to = today.toISOString().split("T")[0];
 		const response = await fetch(
 			`https://api.marketdata.app/v1/stocks/earnings/${symbol}?countback=10`,
 			{
