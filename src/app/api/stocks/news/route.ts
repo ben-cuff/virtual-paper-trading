@@ -13,7 +13,7 @@ export async function GET(request: Request) {
 
 	try {
 		const response = await fetch(
-			`https://api.marketdata.app/v1/stocks/news/${symbol}/`,
+			`https://api.marketdata.app/v1/stocks/news/${symbol}?countback=10`,
 			{
 				method: "GET",
 				headers: {
