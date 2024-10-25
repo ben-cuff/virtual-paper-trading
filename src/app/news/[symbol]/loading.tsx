@@ -17,7 +17,7 @@ export default function NewsLoading() {
 				))}
 			</div>
 			<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-				{[...Array(4)].map((_, index) => (
+				{[...Array(6)].map((_, index) => (
 					<div
 						key={index + 6}
 						className="bg-white border border-gray-200 p-6 rounded-lg shadow-md animate-pulse"
