@@ -82,7 +82,7 @@ export default function NavBar() {
 								/>
 								<button
 									type="submit"
-									className="ml-2 p-2 bg-gray-700 text-white rounded-md"
+									className="ml-2 p-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md transition duration-200 ease-in-out"
 								>
 									Search
 								</button>
@@ -162,7 +162,7 @@ export default function NavBar() {
 							/>
 							<button
 								type="submit"
-								className="ml-2 p-2 bg-gray-700 text-white rounded-md"
+								className="ml-2 p-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md transition duration-200 ease-in-out"
 							>
 								Search
 							</button>
