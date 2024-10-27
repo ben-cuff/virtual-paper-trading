@@ -60,6 +60,33 @@ export default function NavBar() {
 							>
 								Leaderboard
 							</Link>
+							<form
+								onSubmit={(e) => {
+									e.preventDefault();
+									const formData = new FormData(
+										e.currentTarget
+									);
+									const stockSymbol =
+										formData.get("stockSymbol");
+									if (stockSymbol) {
+										window.location.href = `/news/${stockSymbol}`;
+									}
+								}}
+								className="relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none"
+							>
+								<input
+									type="text"
+									name="stockSymbol"
+									placeholder="Search News"
+									className="p-2 rounded-md text-black"
+								/>
+								<button
+									type="submit"
+									className="ml-2 p-2 bg-gray-700 text-white rounded-md"
+								>
+									Search
+								</button>
+							</form>
 						</div>
 					</div>
 					<Profile />
@@ -116,6 +143,30 @@ export default function NavBar() {
 						>
 							Leaderboard
 						</Link>
+						<form
+							onSubmit={(e) => {
+								e.preventDefault();
+								const formData = new FormData(e.currentTarget);
+								const stockSymbol = formData.get("stockSymbol");
+								if (stockSymbol) {
+									window.location.href = `/news/${stockSymbol}`;
+								}
+							}}
+							className="relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none"
+						>
+							<input
+								type="text"
+								name="stockSymbol"
+								placeholder="Search News"
+								className="p-2 rounded-md text-black"
+							/>
+							<button
+								type="submit"
+								className="ml-2 p-2 bg-gray-700 text-white rounded-md"
+							>
+								Search
+							</button>
+						</form>
 					</div>
 				</div>
 				<Profile />
