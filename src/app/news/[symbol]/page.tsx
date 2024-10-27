@@ -26,6 +26,10 @@ export default async function NewsPage({
 			`${process.env.BASE_URL}/api/stocks/news?symbol=${symbol}`
 		);
 
+		if (newsResponse.s != "ok") {
+			return notFound();
+		}
+
 		news = newsResponse;
 	} catch (error) {
 		return notFound();
