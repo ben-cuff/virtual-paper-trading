@@ -79,6 +79,10 @@ export default function NavBar() {
 									name="stockSymbol"
 									placeholder="Search News"
 									className="p-2 rounded-md text-black"
+									onInput={(e) => {
+										e.currentTarget.value =
+											e.currentTarget.value.toUpperCase();
+									}}
 								/>
 								<button
 									type="submit"
@@ -159,6 +163,10 @@ export default function NavBar() {
 								name="stockSymbol"
 								placeholder="Search News"
 								className="p-2 rounded-md text-black"
+								onInput={(e) => {
+									e.currentTarget.value =
+										e.currentTarget.value.toUpperCase();
+								}}
 							/>
 							<button
 								type="submit"
