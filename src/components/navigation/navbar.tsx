@@ -19,12 +19,10 @@ export default function NavBar() {
 				<div className="text-2xl font-bold hover:text-gray-400 transition duration-200 ease-in-out">
 					<Link href="/">Paper Trading</Link>
 				</div>
-				{/* Desktop Links */}
 				<div className="hidden md:flex flex-grow justify-center md:justify-start ml-20 space-x-6">
 					<NavLinks session={session} currentRoute={currentRoute} />
 				</div>
 				<Profile />
-				{/* Mobile Menu Toggle Button */}
 				<div className="md:hidden ml-auto">
 					<button
 						onClick={toggleMobileMenu}
@@ -34,7 +32,6 @@ export default function NavBar() {
 					</button>
 				</div>
 			</div>
-			{/* Mobile Menu */}
 			{isMobileMenuOpen && (
 				<div className="md:hidden">
 					<div className="flex flex-col items-center space-y-4 py-4">
@@ -94,7 +91,6 @@ function NavLinks({ session, currentRoute }: { session: Session | null; currentR
 			>
 				Leaderboard
 			</Link>
-			{/* Search News Form */}
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();
