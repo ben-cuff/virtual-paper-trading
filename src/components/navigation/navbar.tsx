@@ -1,11 +1,11 @@
 "use client";
 
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Profile from "./profile";
-import { Session } from "next-auth";
 
 export default function NavBar() {
 	const currentRoute = usePathname();
@@ -47,11 +47,17 @@ export default function NavBar() {
 	);
 }
 
-function NavLinks({ session, currentRoute }: { session: Session | null; currentRoute: string; }) {
+function NavLinks({
+	session,
+	currentRoute,
+}: {
+	session: Session | null;
+	currentRoute: string;
+}) {
 	const userId = session?.user?.id || "";
 
 	return (
-		<>
+		<div className="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-4">
 			<Link
 				href={`/portfolio/${userId}`}
 				className={`relative p-2 rounded-md ${
@@ -120,6 +126,6 @@ function NavLinks({ session, currentRoute }: { session: Session | null; currentR
 					Search
 				</button>
 			</form>
-		</>
+		</div>
 	);
 }
