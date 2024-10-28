@@ -23,11 +23,13 @@ export default function NavBar() {
 				<div className="hidden md:flex flex-grow justify-center md:justify-start ml-20 space-x-6">
 					<NavLinks session={session} currentRoute={currentRoute} />
 				</div>
-				<Profile />
-				<div className="md:hidden ml-auto">
+				<div className="ml-auto mr-3">
+					<Profile />
+				</div>
+				<div className="md:hidden">
 					<button
 						onClick={toggleMobileMenu}
-						className="text-gray-400 hover:text-white focus:outline-none"
+						className="text-gray-400 hover:text-white focus:outline-none text-lg"
 					>
 						☰
 					</button>
