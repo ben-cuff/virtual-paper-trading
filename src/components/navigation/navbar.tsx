@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Profile from "./profile";
+import { Session } from "next-auth";
 
 export default function NavBar() {
 	const currentRoute = usePathname();
