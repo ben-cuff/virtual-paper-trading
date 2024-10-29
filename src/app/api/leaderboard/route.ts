@@ -8,6 +8,7 @@ export async function GET() {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
+					"x-api-key": `${process.env.X_API_KEY}`,
 				},
 			}
 		);
@@ -55,6 +56,7 @@ export async function POST(request: NextRequest) {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					"x-api-key": `${process.env.X_API_KEY}`,
 				},
 				body: JSON.stringify({ total_worth: total_worth }),
 			}

@@ -1,6 +1,11 @@
 export const fetchData = async (url: string | URL | Request) => {
 	try {
-		const response = await fetch(url, { cache: "no-store" });
+		const response = await fetch(url, {
+			cache: "no-store",
+			headers: {
+				"x-api-key": `${process.env.X_API_KEY}`,
+			},
+		});
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

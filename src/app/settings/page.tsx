@@ -97,6 +97,14 @@ export default function SettingsPage() {
 			>
 				Delete Account
 			</button>
+			<button
+				onClick={() => {
+					router.push("/change-password");
+				}}
+				className="px-5 py-2.5 bg-green-500 text-white border-none rounded cursor-pointer mt-8"
+			>
+				Update Password
+			</button>
 		</div>
 	);
 }

@@ -13,14 +13,15 @@ export async function GET(request: Request) {
 
     try {
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/transactions/${id}`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+			`${process.env.NEXT_PUBLIC_API_URL}/transactions/${id}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					"x-api-key": `${process.env.X_API_KEY}`,
+				},
+			}
+		);
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);

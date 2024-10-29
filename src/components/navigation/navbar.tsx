@@ -1,125 +1,133 @@
 "use client";
 
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import Profile from "./profile";
 
 export default function NavBar() {
 	const currentRoute = usePathname();
 	const { data: session } = useSession();
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-	if (session) {
-		return (
-			<nav className="shadow-md py-2">
-				<div className="flex flex-col md:flex-row items-center px-4 py-2 md:py-0">
-					<div className="text-2xl md:text-3xl font-bold text-white hover:text-gray-400 transition duration-200 ease-in-out mb-4 md:mb-0">
-						<Link href="/">Paper Trading</Link>
-					</div>
-					<div className="flex-grow flex justify-center md:justify-start ml-20">
-						<div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-10">
-							<Link
-								href={`/portfolio/${session.user.id}`}
-								className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
-									currentRoute ===
-									`/portfolio/${session.user.id}`
-										? "border-b-2 border-white"
-										: ""
-								}`}
-							>
-								Portfolio
-							</Link>
-							<Link
-								href={`/transactions/${session.user.id}`}
-								className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
-									currentRoute ===
-									`/transactions/${session.user.id}`
-										? "border-b-2 border-white"
-										: ""
-								}`}
-							>
-								Transactions
-							</Link>
-							<Link
-								href={`/lookup`}
-								className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
-									currentRoute === `/lookup`
-										? "border-b-2 border-white"
-										: ""
-								}`}
-							>
-								Stock Lookup
-							</Link>
-							<Link
-								href="/leaderboard"
-								className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
-									currentRoute === `/leaderboard`
-										? "border-b-2 border-white"
-										: ""
-								}`}
-							>
-								Leaderboard
-							</Link>
-						</div>
-					</div>
-					<Profile />
-				</div>
-			</nav>
-		);
-	}
+	const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
 	return (
-		<nav className="shadow-md py-2">
-			<div className="flex flex-col md:flex-row items-center px-4 py-2 md:py-0">
-				<div className="text-2xl md:text-3xl font-bold text-white hover:text-gray-400 transition duration-200 ease-in-out mb-4 md:mb-0">
+		<nav className="shadow-md py-2 bg-gray-800 text-white">
+			<div className="flex items-center justify-between px-4 py-2">
+				<div className="text-2xl font-bold hover:text-gray-400 transition duration-200 ease-in-out">
 					<Link href="/">Paper Trading</Link>
 				</div>
-				<div className="flex-grow flex justify-center md:justify-start ml-20">
-					<div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-10">
-						<Link
-							href={`/portfolio`}
-							className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
-								currentRoute === `/portfolio`
-									? "border-b-2 border-white"
-									: ""
-							}`}
-						>
-							Portfolio
-						</Link>
-						<Link
-							href={`/transactions`}
-							className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
-								currentRoute === "/transactions"
-									? "border-b-2 border-white"
-									: ""
-							}`}
-						>
-							Transactions History
-						</Link>
-						<Link
-							href={`/lookup`}
-							className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
-								currentRoute === `/lookup`
-									? "border-b-2 border-white"
-									: ""
-							}`}
-						>
-							Stock Lookup
-						</Link>
-						<Link
-							href="/leaderboard"
-							className={`relative inline-flex items-center p-2 md:p-4 justify-center rounded-md text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ${
-								currentRoute === `/leaderboard`
-									? "border-b-2 border-white"
-									: ""
-							}`}
-						>
-							Leaderboard
-						</Link>
+				<div className="hidden md:flex flex-grow justify-center md:justify-start ml-20 space-x-6">
+					<NavLinks session={session} currentRoute={currentRoute} />
+				</div>
+				<div className="ml-auto mr-3">
+					<Profile />
+				</div>
+				<div className="md:hidden">
+					<button
+						onClick={toggleMobileMenu}
+						className="text-gray-400 hover:text-white focus:outline-none text-lg"
+					>
+						☰
+					</button>
+				</div>
+			</div>
+			{isMobileMenuOpen && (
+				<div className="md:hidden">
+					<div className="flex flex-col items-center space-y-4 py-4">
+						<NavLinks
+							session={session}
+							currentRoute={currentRoute}
+						/>
 					</div>
 				</div>
-				<Profile />
-			</div>
+			)}
 		</nav>
+	);
+}
+
+function NavLinks({
+	session,
+	currentRoute,
+}: {
+	session: Session | null;
+	currentRoute: string;
+}) {
+	const userId = session?.user?.id || "";
+
+	return (
+		<div className="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-4">
+			<Link
+				href={`/portfolio/${userId}`}
+				className={`relative p-2 rounded-md ${
+					currentRoute === `/portfolio/${userId}`
+						? "border-b-2 border-white"
+						: "text-gray-400 hover:bg-gray-700 hover:text-white"
+				}`}
+			>
+				Portfolio
+			</Link>
+			<Link
+				href={`/transactions/${userId}`}
+				className={`relative p-2 rounded-md ${
+					currentRoute === `/transactions/${userId}`
+						? "border-b-2 border-white"
+						: "text-gray-400 hover:bg-gray-700 hover:text-white"
+				}`}
+			>
+				Transactions
+			</Link>
+			<Link
+				href={`/lookup`}
+				className={`relative p-2 rounded-md ${
+					currentRoute === `/lookup`
+						? "border-b-2 border-white"
+						: "text-gray-400 hover:bg-gray-700 hover:text-white"
+				}`}
+			>
+				Stock Lookup
+			</Link>
+			<Link
+				href="/leaderboard"
+				className={`relative p-2 rounded-md ${
+					currentRoute === `/leaderboard`
+						? "border-b-2 border-white"
+						: "text-gray-400 hover:bg-gray-700 hover:text-white"
+				}`}
+			>
+				Leaderboard
+			</Link>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					const formData = new FormData(e.currentTarget);
+					const stockSymbol = formData.get("stockSymbol");
+					if (stockSymbol) {
+						window.location.href = `/news/${stockSymbol}`;
+					}
+				}}
+				className="flex items-center p-2"
+			>
+				<input
+					type="text"
+					name="stockSymbol"
+					placeholder="Search News"
+					className="p-2 rounded-md text-black md:w-auto w-24"
+					onInput={(e) => {
+						e.currentTarget.value =
+							e.currentTarget.value.toUpperCase();
+					}}
+				/>
+				<button
+					type="submit"
+					className="ml-2 p-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md transition duration-200 ease-in-out"
+				>
+					Search
+				</button>
+			</form>
+		</div>
 	);
 }

@@ -2,45 +2,45 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Register() {
+export default function UpdatePasswordPage() {
 	const { data: session } = useSession();
 	const router = useRouter();
 
-	if (session) {
-		redirect("/");
-	}
-
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [passwordCopy, setPasswordCopy] = useState("");
+	const [currentPassword, setCurrentPassword] = useState("");
+	const [newPassword, setNewPassword] = useState("");
+	const [newPasswordCopy, setNewPasswordCopy] = useState("");
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (password.length < 8) {
-			alert("Password must be at least 8 characters long");
+		if (!session) {
+			alert("You must be logged in to change your password.");
 			return;
 		}
 
-		if (password !== passwordCopy) {
-			alert("Make sure the passwords are the same");
+		if (newPassword.length < 8) {
+			alert("New password must be at least 8 characters long");
+			return;
+		}
+
+		if (newPassword !== newPasswordCopy) {
+			alert("Make sure the new passwords are the same");
 			return;
 		}
 
 		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_BASE_URL}/api/register`,
+			`${process.env.NEXT_PUBLIC_BASE_URL}/api/change-password`,
 			{
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					name: name,
-					email: email,
-					password: password,
+					id: session.user.id,
+					currentPassword: currentPassword,
+					newPassword: newPassword,
 				}),
 			}
 		);
@@ -51,7 +51,15 @@ export default function Register() {
 			return;
 		}
 
-		router.push("/signin");
+		const data = await response.json();
+
+		if (!data.success) {
+			alert("Your current password is incorrect");
+			return;
+		}
+
+		alert("Password updated successfully");
+		router.push("/");
 	};
 
 	return (
@@ -62,64 +70,48 @@ export default function Register() {
 			>
 				<div className="mb-4">
 					<label
-						htmlFor="name"
+						htmlFor="currentPassword"
 						className="block text-sm font-medium text-gray-700"
 					>
-						Name:
-					</label>
-					<input
-						type="text"
-						id="name"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-						required
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-					/>
-				</div>
-				<div className="mb-4">
-					<label
-						htmlFor="email"
-						className="block text-sm font-medium text-gray-700"
-					>
-						Email:
-					</label>
-					<input
-						type="email"
-						id="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						required
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-					/>
-				</div>
-				<div className="mb-4">
-					<label
-						htmlFor="password"
-						className="block text-sm font-medium text-gray-700"
-					>
-						Password:
+						Current Password:
 					</label>
 					<input
 						type="password"
-						id="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
+						id="currentPassword"
+						value={currentPassword}
+						onChange={(e) => setCurrentPassword(e.target.value)}
+						required
+						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+					/>
+				</div>
+				<div className="mb-4">
+					<label
+						htmlFor="newPassword"
+						className="block text-sm font-medium text-gray-700"
+					>
+						New Password:
+					</label>
+					<input
+						type="password"
+						id="newPassword"
+						value={newPassword}
+						onChange={(e) => setNewPassword(e.target.value)}
 						required
 						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 					/>
 				</div>
 				<div className="mb-6">
 					<label
-						htmlFor="passwordCopy"
+						htmlFor="newPasswordCopy"
 						className="block text-sm font-medium text-gray-700"
 					>
-						Confirm Password:
+						Confirm New Password:
 					</label>
 					<input
 						type="password"
-						id="passwordCopy"
-						value={passwordCopy}
-						onChange={(e) => setPasswordCopy(e.target.value)}
+						id="newPasswordCopy"
+						value={newPasswordCopy}
+						onChange={(e) => setNewPasswordCopy(e.target.value)}
 						required
 						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 					/>
@@ -128,14 +120,14 @@ export default function Register() {
 					type="submit"
 					className="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 				>
-					Register
+					Update Password
 				</button>
 			</form>
 			<Link
-				href="/signin"
+				href="/"
 				className="mt-4 inline-block text-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 			>
-				Sign In
+				Back to Home
 			</Link>
 		</div>
 	);

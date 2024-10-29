@@ -1,4 +1,3 @@
-import getBalance from "@/util/get-balance";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -72,6 +71,22 @@ export const authOptions: NextAuthOptions = {
 		},
 	},
 	pages: {
-		signIn: '/signin'
-	}
+		signIn: "/signin",
+	},
 };
+
+async function getBalance(id: number) {
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_BASE_URL}/api/user?id=${id}`,
+		{
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"x-api-key": `${process.env.X_API_KEY}`,
+			},
+		}
+	);
+
+	const data = await res.json();
+	return data.balance;
+}

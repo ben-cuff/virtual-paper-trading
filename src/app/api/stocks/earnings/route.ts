@@ -1,38 +1,35 @@
 import { NextResponse } from "next/server";
 
-export async function DELETE(request: Request) {
+export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
-	const id = searchParams.get("id");
+	const symbol = searchParams.get("symbol");
 
-	if (!id) {
+	if (!symbol) {
 		return NextResponse.json(
-			{ error: "User ID is required" },
+			{ error: "Missing query parameter: symbol" },
 			{ status: 400 }
 		);
 	}
 
 	try {
 		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/delete/${id}`,
+			`https://api.marketdata.app/v1/stocks/earnings/${symbol}?countback=10`,
 			{
-				method: "DELETE",
+				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
-					"x-api-key": `${process.env.X_API_KEY}`,
+					Authorization: `Bearer ${process.env.MARKETDATA_API_TOKEN}`,
 				},
 			}
 		);
 
-		if (!response.ok) {
-			throw new Error(`Error: ${response.status} ${response.statusText}`);
-		}
-
 		const data = await response.json();
+
 		return NextResponse.json(data, { status: 200 });
 	} catch (error) {
 		console.error(error);
 		return NextResponse.json(
-			{ error: "Failed to delete user" },
+			{ error: "Error fetching stock news" },
 			{ status: 500 }
 		);
 	}

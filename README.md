@@ -17,7 +17,7 @@ This project is built using the following tech stack:
     -   [www.api.virtualpapertrading.com](https://www.api.virtualpapertrading.com) for saving user information
 -   **Backend**: Python FastAPI for the main backend and routes using NextJS built in API routes
 -   **Database**: PostgreSQL
--   **Authentication**: Auth.js
+-   **Authentication**: NextAuth
 -   **CSS Framework**: TailwindCSS
 -   **Host**: Vercel
 -   **Formatting**: prettier
