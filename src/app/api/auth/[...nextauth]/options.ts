@@ -16,6 +16,7 @@ declare module "next-auth" {
 	}
 }
 
+// Options for next-auth
 export const authOptions: NextAuthOptions = {
 	providers: [
 		CredentialsProvider({
@@ -25,6 +26,7 @@ export const authOptions: NextAuthOptions = {
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials) {
+				// Logs into using www.api.virtualpapertrading.com api using the credentials provider
 				const res = await fetch(
 					`${process.env.NEXT_PUBLIC_API_URL}/login`,
 					{
@@ -42,9 +44,9 @@ export const authOptions: NextAuthOptions = {
 				const data = await res.json();
 
 				if (res.ok && data.success) {
-					return data.user;
+					return data.user; // if its successful it returns the user's values
 				} else {
-					return null;
+					return null; // returns null indicating failure
 				}
 			},
 		}),
@@ -61,7 +63,7 @@ export const authOptions: NextAuthOptions = {
 		},
 		async session({ session, token }) {
 			if (session.user) {
-				const balance = await getBalance(token.id as number);
+				const balance = await getBalance(token.id as number); // gets the balance of the user
 				session.user.id = token.id as number;
 				session.user.name = token.name;
 				session.user.email = token.email;
@@ -71,10 +73,11 @@ export const authOptions: NextAuthOptions = {
 		},
 	},
 	pages: {
-		signIn: "/signin",
+		signIn: "/signin", // custom sign in page
 	},
 };
 
+//function gets the balance of the user so they know how much they have to trade with
 async function getBalance(id: number) {
 	const res = await fetch(
 		`${process.env.NEXT_PUBLIC_BASE_URL}/api/user?id=${id}`,
