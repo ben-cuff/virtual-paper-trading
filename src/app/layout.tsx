@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 	description: "Trade with fake money",
 };
 
+// RootLayout component that wraps the application with a NavBar and ClientProvider
 export default function RootLayout({
 	children,
 }: Readonly<{

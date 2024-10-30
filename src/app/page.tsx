@@ -9,7 +9,16 @@ import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 import { authOptions } from "./api/auth/[...nextauth]/options";
 
-export default async function Home() {
+/**
+ * The main component for the home page of the virtual paper trading application.
+ *
+ * This component determines whether a user session exists and renders different
+ * components based on the session state. If a session is found, it displays the
+ * main trading interface with sections for transactions, portfolio, and lookup.
+ * If no session is found, it displays the landing page.
+ *
+ */
+export default async function HomePage() {
 	const session = await getServerSession(authOptions);
 
 	if (session) {

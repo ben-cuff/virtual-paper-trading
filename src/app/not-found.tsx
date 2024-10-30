@@ -1,3 +1,4 @@
+// Default not found page
 export default function NotFoundPage() {
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen">
