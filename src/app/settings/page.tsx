@@ -4,6 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+// This is the settings page for the website. It allows the user to change their password, delete their account or reset their account.
 export default function SettingsPage() {
 	const { data: session, status } = useSession();
 	const router = useRouter();
