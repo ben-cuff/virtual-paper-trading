@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+// Custom signin page for next-auth
 export default function SignInPage() {
 	const router = useRouter();
 	const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ export default function SignInPage() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
+		// uses credentials from next-auth
 		const result = await signIn("credentials", {
 			email: email,
 			password: password,
@@ -20,7 +22,7 @@ export default function SignInPage() {
 		});
 
 		if (result?.ok) {
-			router.push("/");
+			router.push("/"); // if successful, sends them to the home page
 		} else {
 			console.error("Login failed.");
 			alert(
