@@ -1,3 +1,5 @@
+// not found page for the portfolio route.
+// indicates that the user does not exist in the DB
 export default function NotFoundPage() {
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen">
