@@ -1,3 +1,4 @@
+// loading skeleton for the news route
 export default function NewsLoading() {
 	return (
 		<div className="p-4 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">

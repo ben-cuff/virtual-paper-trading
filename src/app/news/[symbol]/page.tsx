@@ -2,6 +2,7 @@ import { fetchData } from "@/util/fetch-data";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+// all the data needed to make teh news route
 interface News {
 	s: string;
 	symbol: string[];
@@ -12,26 +13,30 @@ interface News {
 	updated: number;
 }
 
+// constructs the news page
 export default async function NewsPage({
 	params,
 }: {
 	params: { symbol: string };
 }) {
-	const { symbol } = params;
+	const { symbol } = params; // the stock symbol string from the dynamic route
 
 	let news: News;
 
+	// attempts to get the news for the given stock symbol
 	try {
 		const newsResponse = await fetchData(
 			`${process.env.BASE_URL}/api/stocks/news?symbol=${symbol}`
 		);
 
+		// if the status is not ok, then it returns the not found page
 		if (newsResponse.s != "ok") {
 			return notFound();
 		}
 
 		news = newsResponse;
 	} catch (error) {
+		// if any other error occurs, it shows the not found page
 		return notFound();
 	}
 
