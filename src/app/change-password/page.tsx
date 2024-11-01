@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+// allows the user to change their password
 export default function UpdatePasswordPage() {
 	const { data: session } = useSession();
 	const router = useRouter();
@@ -13,23 +14,28 @@ export default function UpdatePasswordPage() {
 	const [newPassword, setNewPassword] = useState("");
 	const [newPasswordCopy, setNewPasswordCopy] = useState("");
 
+	// handles the submission of the form
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		// must be signed in to change password
 		if (!session) {
 			alert("You must be logged in to change your password.");
 			return;
 		}
 
+		// new password must be a certain length
 		if (newPassword.length < 8) {
 			alert("New password must be at least 8 characters long");
 			return;
 		}
 
+		// passwords must be the same
 		if (newPassword !== newPasswordCopy) {
 			alert("Make sure the new passwords are the same");
 			return;
 		}
 
+		// attempts to change the password
 		const response = await fetch(
 			`${process.env.NEXT_PUBLIC_BASE_URL}/api/change-password`,
 			{
@@ -45,6 +51,7 @@ export default function UpdatePasswordPage() {
 			}
 		);
 
+		// if response isn't ok, alert the user to the error
 		if (!response.ok) {
 			const errorData = await response.json();
 			alert(`Error: ${errorData.detail}`);
@@ -53,11 +60,13 @@ export default function UpdatePasswordPage() {
 
 		const data = await response.json();
 
+		// if the data is not successful, then the current password entered was wrong
 		if (!data.success) {
 			alert("Your current password is incorrect");
 			return;
 		}
 
+		// alerts the user that their password was changed successfully, and sends them to the home page
 		alert("Password updated successfully");
 		router.push("/");
 	};

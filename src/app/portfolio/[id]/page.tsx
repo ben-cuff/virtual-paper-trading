@@ -1,11 +1,13 @@
 import { fetchData } from "@/util/fetch-data";
 import { notFound } from "next/navigation";
 
+// user interface to store necessary info to get total worth and name
 interface User {
 	name: string;
 	balance: number;
 }
 
+// all the stock info needed to make the page
 interface Stock {
 	stock_symbol: string;
 	shares_owned: number;
@@ -14,6 +16,7 @@ interface Stock {
 	total_change: number;
 }
 
+// includes the user info, total_worth, and an array of stocks representing the portfolio
 interface PortfolioData {
 	user: User;
 	total_worth: number;
@@ -25,10 +28,11 @@ export default async function PortfolioPage({
 }: {
 	params: { id: string };
 }) {
-	const { id } = params;
+	const { id } = params; // the dynamic route id representing the user
 
 	let stockData: PortfolioData;
 
+	// attempts to get the users portfolio
 	try {
 		stockData = await fetchData(
 			`${process.env.BASE_URL}/api/portfolio?id=${id}`
@@ -37,6 +41,7 @@ export default async function PortfolioPage({
 		return notFound();
 	}
 
+	// gets the current price for all the stocks in the portfolio
 	const updatedPortfolio = await Promise.all(
 		stockData.portfolio.map(async (stock: Stock) => {
 			const currentPrice = await fetchData(
@@ -51,6 +56,7 @@ export default async function PortfolioPage({
 
 	stockData.portfolio = updatedPortfolio;
 
+	// gets the total worth of the user
 	const totalWorth =
 		stockData.user.balance +
 		stockData.portfolio.reduce(
@@ -61,6 +67,7 @@ export default async function PortfolioPage({
 
 	stockData.total_worth = totalWorth;
 
+	// updates the leaderboard given the user's total worth
 	await fetch(`${process.env.BASE_URL}/api/leaderboard?id=${id}`, {
 		method: "POST",
 		headers: {
@@ -69,6 +76,7 @@ export default async function PortfolioPage({
 		body: JSON.stringify({ total_worth: totalWorth }),
 	});
 
+	// gets the change over the time the user has had the stcok
 	stockData.portfolio = stockData.portfolio.map((stock: Stock) => ({
 		...stock,
 		total_change:

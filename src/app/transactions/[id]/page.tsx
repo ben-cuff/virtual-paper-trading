@@ -1,6 +1,7 @@
 import { fetchData } from "@/util/fetch-data";
 import { notFound } from "next/navigation";
 
+// Data need to construct transaction List
 interface Transaction {
 	stock_symbol: string;
 	transaction_type: string;
@@ -9,6 +10,7 @@ interface Transaction {
 	time: string;
 }
 
+// An array of transactions
 type TransactionData = Transaction[];
 
 export default async function TransactionPage({
@@ -16,17 +18,19 @@ export default async function TransactionPage({
 }: {
 	params: { id: string };
 }) {
-	const { id } = params;
+	const { id } = params; // id from the dynamic route
 
+	// gets the user's transactions
 	let result;
 	try {
 		result = await fetchData(
 			`${process.env.BASE_URL}/api/transactions?id=${id}`
 		);
 	} catch (error) {
-		return notFound();
+		return notFound(); // sends them to the not found page is their ID isn't found
 	}
 
+	// constructs the array of transactions
 	const transactionsList: TransactionData = result.transactions.map(
 		(item: Transaction) => {
 			return {
@@ -39,7 +43,7 @@ export default async function TransactionPage({
 		}
 	);
 
-	// reverses the list
+	// reverses the list so they can be newest first
 	transactionsList.reverse();
 
 	return (

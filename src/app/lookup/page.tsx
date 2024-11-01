@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { Chart } from "react-google-charts";
 
+// info needed to make the stock graph
 interface StockCandles {
 	s: string;
 	t: number[];
@@ -18,17 +19,20 @@ interface StockCandles {
 }
 
 export default function Lookup() {
-	const [symbol, setSymbol] = useState("");
-	const [data, setData] = useState<StockCandles | null>(null);
-	const [time, setTime] = useState("5D");
-	const [chartType, setChartType] = useState("Candlestick");
-	const [isLoading, setIsLoading] = useState(false);
+	const [symbol, setSymbol] = useState(""); // symbol of the stock
+	const [data, setData] = useState<StockCandles | null>(null); // candle data
+	const [time, setTime] = useState("5D"); // time period
+	const [chartType, setChartType] = useState("Candlestick"); // type of chart
+	const [isLoading, setIsLoading] = useState(false); // whether or not the chart is loading
 
+	// handles the submission of the form
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 		setIsLoading(true);
 		const dateBegin = (() => {
 			const currentDate = new Date();
+
+			// maps the time period to the day in past needed
 			const timeMap: { [key: string]: () => Date } = {
 				"1D": () =>
 					new Date(currentDate.setDate(currentDate.getDate())),
@@ -47,13 +51,17 @@ export default function Lookup() {
 				default: () =>
 					new Date(currentDate.setDate(currentDate.getDate() - 30)),
 			};
+
+			// puts the date in the right form
 			return (timeMap[time] || timeMap["default"])()
 				.toISOString()
 				.split("T")[0];
 		})();
 
+		// end date in correct form
 		const dateEnd = new Date().toISOString().split("T")[0];
 		try {
+			// maps the period to the resolution of the graph
 			const resolutions: { [key: string]: string } = {
 				"1D": "1",
 				"5D": "20",
@@ -67,6 +75,7 @@ export default function Lookup() {
 			let dateBeginTemp = dateBegin;
 
 			do {
+				// gets the candle data and current stock data
 				const [candleData, stockData] = await Promise.all([
 					fetchData(
 						`api/stocks/getCandle?symbol=${symbol}&resolution=${resolution}&from=${dateBeginTemp}&to=${dateEnd}`
@@ -74,6 +83,7 @@ export default function Lookup() {
 					fetchData(`api/stocks/getStockData?symbol=${symbol}`),
 				]);
 
+				// sends a error if they cant find data
 				if (stockData.s != "ok") {
 					alert(
 						"Error fetching stock data for this symbol. Please try again."
@@ -81,9 +91,11 @@ export default function Lookup() {
 					return;
 				}
 
+				// assigns the data
 				const curPrice = stockData.last;
 				data = { ...candleData, curPrice };
 
+				// if no_data is found, then that means that its probably a weekend or something, so go to previous day
 				if (data.s === "no_data") {
 					dateBeginTemp = new Date(
 						new Date(dateBeginTemp).setDate(
@@ -93,7 +105,7 @@ export default function Lookup() {
 						.toISOString()
 						.split("T")[0];
 				}
-			} while (data.s === "no_data");
+			} while (data.s === "no_data"); // loops until data is found
 
 			setData(data);
 		} catch (error) {
@@ -103,6 +115,7 @@ export default function Lookup() {
 		}
 	};
 
+	// constructs the necessary chartData to make the candle or mountain chart
 	const chartData = [
 		["Date", "Low", "Open", "Close", "High"],
 		...(data && data.s == "ok"
@@ -118,6 +131,7 @@ export default function Lookup() {
 			: []),
 	];
 
+	// assigns the options for the chart
 	const options = {
 		title: "Stock Prices",
 		legend: "none",
@@ -128,6 +142,7 @@ export default function Lookup() {
 		backgroundColor: "#E5E7EB",
 	};
 
+	// candlestick chart component given the options and data
 	const CandlestickChart = () => {
 		const minPrice = Math.min(...(data?.l || []));
 		const maxPrice = Math.max(...(data?.h || []));
@@ -156,7 +171,9 @@ export default function Lookup() {
 		);
 	};
 
+	// mountain chart component
 	const MountainLineChart = () => {
+		// constructs the data for the mountain line chart
 		const lineChartData = [
 			["Date", "Close"],
 			...(data && data.s == "ok"
@@ -169,6 +186,7 @@ export default function Lookup() {
 				: []),
 		];
 
+		//options for the mountain chart
 		const lineChartOptions = {
 			title: "Stock Prices",
 			legend: "none",

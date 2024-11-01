@@ -1,3 +1,4 @@
+// Leaderboard skeleton for the leaderboard route
 export default function LeaderboardLoading() {
 	return (
 		<div className="p-4">

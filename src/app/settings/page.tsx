@@ -4,10 +4,12 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+// This is the settings page for the website. It allows the user to change their password, delete their account or reset their account.
 export default function SettingsPage() {
 	const { data: session, status } = useSession();
 	const router = useRouter();
 
+	// checks if the user is logged in
 	useEffect(() => {
 		if (status === "unauthenticated") {
 			router.push("/");
@@ -18,6 +20,7 @@ export default function SettingsPage() {
 		return <div>Loading...</div>;
 	}
 
+	//handles when the user tries to delete their account
 	const handleResetAccount = async () => {
 		try {
 			const response = await fetch(
@@ -42,6 +45,7 @@ export default function SettingsPage() {
 		}
 	};
 
+	//handles when the user tries to delete their account
 	const handleDeleteAccount = async () => {
 		try {
 			const response = await fetch(
