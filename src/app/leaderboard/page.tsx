@@ -1,8 +1,9 @@
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; // ensures the leaderboard is always re-rendered
 
 import { fetchData } from "@/util/fetch-data";
 import Link from "next/link";
 
+// interface used to construct the leaderboard page
 interface LeaderboardEntry {
 	name: string;
 	user_id: number;
@@ -10,6 +11,7 @@ interface LeaderboardEntry {
 }
 
 export default async function LeaderboardPage() {
+	// gets the data for the leaderboard route
 	const data = await fetchData(`${process.env.BASE_URL}/api/leaderboard/`);
 
 	const leaderboard = data.leaderboard;
