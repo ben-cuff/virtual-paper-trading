@@ -5,10 +5,12 @@ import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 
+// this page allows the user to register their account
 export default function Register() {
 	const { data: session } = useSession();
 	const router = useRouter();
 
+	// if they're signed in, it sends them to the home page
 	if (session) {
 		redirect("/");
 	}
@@ -18,18 +20,23 @@ export default function Register() {
 	const [password, setPassword] = useState("");
 	const [passwordCopy, setPasswordCopy] = useState("");
 
+	// handles submission of the register form
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
+		// password needs to be 8 char
 		if (password.length < 8) {
 			alert("Password must be at least 8 characters long");
 			return;
 		}
 
+		// password and passwordCopy must be the same
 		if (password !== passwordCopy) {
 			alert("Make sure the passwords are the same");
 			return;
 		}
 
+		// attempts to register the user with the api
 		const response = await fetch(
 			`${process.env.NEXT_PUBLIC_BASE_URL}/api/register`,
 			{
@@ -45,12 +52,14 @@ export default function Register() {
 			}
 		);
 
+		// if the registration fails, alert the user to the error
 		if (!response.ok) {
 			const errorData = await response.json();
 			alert(`Error: ${errorData.detail}`);
 			return;
 		}
 
+		// if all passes, send the user to the sign in page
 		router.push("/signin");
 	};
 
