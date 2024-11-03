@@ -6,9 +6,9 @@ body {
 	@apply bg-custom-gradient;
 	min-height: 100vh;
 	background-attachment: fixed;
-	background-size: cover;
-	margin: 0;
-	padding: 0;
+}
+body::before {
+	@apply bg-custom-gradient;
 }
 
 .shadow-top {
