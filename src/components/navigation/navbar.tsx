@@ -40,7 +40,7 @@ export default function NavBar() {
 				<div className="md:hidden">
 					<button
 						onClick={toggleSideNav}
-						className="text-gray-400 hover:text-white focus:outline-none text-lg"
+						className="text-gray-400 hover:text-white focus:outline-none text-3xl mb-2"
 					>
 						☰
 					</button>
