@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+// profile component for the user, allows them to sign in if they are not authenticated
+// opens up menu with settings and signout if they are authenticated
 export default function Profile() {
 	const { data: session } = useSession();
 	const [menuVisible, setMenuVisible] = useState(false);
@@ -20,6 +22,7 @@ export default function Profile() {
 		router.push("/settings"); // Navigate to the settings page
 	};
 
+	// returns different things depending on whether or not the user is authenticated
 	return (
 		<div className="relative inline-block text-left">
 			{session ? (
@@ -67,7 +70,7 @@ export default function Profile() {
 			) : (
 				<div>
 					<Image
-						className="rounded-full cursor-pointer transition-transform transform hover:scale-105"
+						className="rounded-full cursor-pointer transition-transform transform hover:scale-105 opacity-50"
 						src="/Default-Profile-Picture-Transparent-Image.png"
 						alt="Not Signed In"
 						width={55}
