@@ -102,12 +102,14 @@ export default async function PortfolioPage({
 						<table className="min-w-full  rounded-lg shadow-sm text-sm">
 							<thead>
 								<tr>
-									<th className="py-2 px-4">Symbol</th>
-									<th className="py-2 px-4">Value</th>
-									<th className="py-2 px-4">Shares</th>
-									<th className="py-2 px-4">Avg Price</th>
-									<th className="py-2 px-4">Current Price</th>
-									<th className="py-2 px-4">Change</th>
+									<th className="py-2 px-auto">Symbol</th>
+									<th className="py-2 px-auto">Value</th>
+									<th className="py-2 px-auto">Shares</th>
+									<th className="py-2 px-auto">Avg Price</th>
+									<th className="py-2 px-auto">
+										Current Price
+									</th>
+									<th className="py-2 px-auto">Change</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -120,23 +122,23 @@ export default async function PortfolioPage({
 											<td className="py-2 px-4 font-semibold">
 												{stock.stock_symbol}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												$
 												{(
 													stock.shares_owned *
 													stock.current_price
 												).toFixed(2)}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												{stock.shares_owned}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												${stock.average_price}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												${stock.current_price}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												<span
 													className={
 														stock.total_change < 0

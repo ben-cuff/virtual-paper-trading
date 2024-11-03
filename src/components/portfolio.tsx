@@ -83,7 +83,9 @@ export default async function Portfolio({ id }: { id: number }) {
 									<th className="py-2 px-auto">Value</th>
 									<th className="py-2 px-auto">Shares</th>
 									<th className="py-2 px-auto">Avg Price</th>
-									<th className="py-2 px-auto">Current Price</th>
+									<th className="py-2 px-auto">
+										Current Price
+									</th>
 									<th className="py-2 px-auto">Change</th>
 								</tr>
 							</thead>
@@ -94,26 +96,26 @@ export default async function Portfolio({ id }: { id: number }) {
 											key={index}
 											className="border-t border-gray-600 text-center"
 										>
-											<td className="py-2 px-4 font-semibold">
+											<td className="py-2 px-auto font-semibold">
 												{stock.stock_symbol}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												$
 												{(
 													stock.shares_owned *
 													stock.current_price
 												).toFixed(2)}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												{stock.shares_owned}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												${stock.average_price}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												${stock.current_price}
 											</td>
-											<td className="py-2 px-4">
+											<td className="py-2 px-auto">
 												<span
 													className={
 														stock.total_change < 0

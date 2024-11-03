@@ -25,22 +25,22 @@ export default function LoadingPortfolio() {
 								key={index}
 								className="border-t border-gray-600 text-center"
 							>
-								<td className="py-2 px-4">
+								<td className="py-2 px-auto">
 									<div className="bg-gray-700 h-6 w-16 animate-pulse"></div>
 								</td>
-								<td className="py-2 px-4">
+								<td className="py-2 px-auto">
 									<div className="bg-gray-700 h-6 w-24 animate-pulse"></div>
 								</td>
-								<td className="py-2 px-4">
+								<td className="py-2 px-auto">
 									<div className="bg-gray-700 h-6 w-12 animate-pulse"></div>
 								</td>
-								<td className="py-2 px-4">
+								<td className="py-2 px-auto">
 									<div className="bg-gray-700 h-6 w-16 animate-pulse"></div>
 								</td>
-								<td className="py-2 px-4">
+								<td className="py-2 px-auto">
 									<div className="bg-gray-700 h-6 w-16 animate-pulse"></div>
 								</td>
-								<td className="py-2 px-4">
+								<td className="py-2 px-auto">
 									<div className="bg-gray-700 h-6 w-12 animate-pulse"></div>
 								</td>
 							</tr>
