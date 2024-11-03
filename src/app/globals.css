@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-	@apply bg-custom-gradient;
-	min-height: 100vh;
-	background-attachment: fixed;
+@layer base {
+	body {
+		@apply bg-custom-gradient;
+		min-height: 100vh;
+		background-attachment: fixed;
+	}
 }
 
 .shadow-top {
