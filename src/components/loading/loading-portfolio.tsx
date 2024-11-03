@@ -1,3 +1,5 @@
+// loading component for the portfolio component
+// looks like a skeleton of the component
 export default function LoadingPortfolio() {
 	return (
 		<div className="p-4 shadow-md text-white shadow-top h-96 mt-1">

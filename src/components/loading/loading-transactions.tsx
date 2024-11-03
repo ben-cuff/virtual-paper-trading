@@ -1,6 +1,7 @@
-import React from "react";
+// loading component for the transactions component
+// looks like a skeleton of the component
 
-const LoadingTransactions: React.FC = () => {
+export default function LoadingTransactions() {
 	return (
 		<div className="p-4 shadow-md border-gray-400 text-white h-96 overflow-y-auto">
 			<h2 className="text-xl font-bold mb-2 text-center">Transactions</h2>
@@ -17,6 +18,4 @@ const LoadingTransactions: React.FC = () => {
 			</ul>
 		</div>
 	);
-};
-
-export default LoadingTransactions;
+}
