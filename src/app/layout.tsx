@@ -16,12 +16,12 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className="bg-custom-gradient bg-fixed overflow-y-hidden">
+			<body className="bg-custom-gradient bg-fixed">
 				<ClientProvider>
-					<div className="sticky top-0 z-50 bg-transparent backdrop-filter backdrop-blur-lg">
+					<div className="fixed w-full top-0 z-50 bg-transparent backdrop-filter backdrop-blur-lg">
 						<NavBar />
 					</div>
-					{children}
+					<div className="mt-20">{children}</div>
 				</ClientProvider>
 			</body>
 		</html>
