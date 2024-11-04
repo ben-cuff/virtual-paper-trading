@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className="bg-custom-gradient bg-fixed">
+			<body className="bg-custom-gradient bg-scroll">
 				<ClientProvider>
 					<div className="sticky top-0 z-50 bg-transparent backdrop-filter backdrop-blur-lg">
 						<NavBar />
