@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-	@apply bg-custom-gradient;
-	min-height: 100vh;
-	background-attachment: fixed;
-}
 
 .shadow-top {
 	box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1),
@@ -41,6 +36,36 @@ body {
 	to {
 		transform: rotate(0deg);
 	}
+}
+
+@keyframes slideIn {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+.side-nav {
+	animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideOut {
+	from {
+		transform: translateX(0);
+		opacity: 1;
+	}
+	to {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+}
+
+.side-nav-out {
+	animation: slideOut 0.3s ease-in forwards;
 }
 
 .animate-spin-reverse {

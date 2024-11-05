@@ -24,14 +24,14 @@ export default async function HomePage() {
 	if (session) {
 		return (
 			<div className="flex flex-col h-screen">
-				<div className="flex">
-					<div className="w-1/4">
+				<div className="flex flex-col md:flex-row">
+					<div className="w-full md:w-1/4">
 						<Transact id={session.user.id as number} />
 					</div>
-					<div className="w-1/2">
+					<div className="w-full md:w-1/2">
 						<Lookup />
 					</div>
-					<div className="w-1/4">
+					<div className="w-full md:w-1/4">
 						<Suspense fallback={<LoadingTransactions />}>
 							<Transactions id={session.user.id as number} />
 						</Suspense>

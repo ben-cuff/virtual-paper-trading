@@ -1,9 +1,11 @@
-export default async function buyStock(
+// allows the user to sell a stock
+export default async function sellStock(
 	id: number,
 	symbol: string,
 	quantity: number,
 	price: number
 ) {
+	// makes the sell API call given the props
 	const response = await fetch(
 		`${process.env.NEXT_PUBLIC_BASE_URL}/api/stocks/sell?id=${id}`,
 		{

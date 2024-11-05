@@ -10,12 +10,23 @@ import Profile from "./profile";
 export default function NavBar() {
 	const currentRoute = usePathname();
 	const { data: session } = useSession();
-	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const [isSideNavOpen, setIsSideNavOpen] = useState(false);
+	const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
-	const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+	const toggleSideNav = () => {
+		if (isSideNavOpen) {
+			setIsAnimatingOut(true);
+			setTimeout(() => {
+				setIsSideNavOpen(false);
+				setIsAnimatingOut(false);
+			}, 300);
+		} else {
+			setIsSideNavOpen(true);
+		}
+	};
 
 	return (
-		<nav className="shadow-md py-2 bg-gray-800 text-white">
+		<nav className="shadow-md py-2 text-white relative">
 			<div className="flex items-center justify-between px-4 py-2">
 				<div className="text-2xl font-bold hover:text-gray-400 transition duration-200 ease-in-out">
 					<Link href="/">Paper Trading</Link>
@@ -23,21 +34,29 @@ export default function NavBar() {
 				<div className="hidden md:flex flex-grow justify-center md:justify-start ml-20 space-x-6">
 					<NavLinks session={session} currentRoute={currentRoute} />
 				</div>
-				<div className="ml-auto mr-3">
+				<div className="ml-auto mr-3 z-10">
 					<Profile />
 				</div>
 				<div className="md:hidden">
 					<button
-						onClick={toggleMobileMenu}
-						className="text-gray-400 hover:text-white focus:outline-none text-lg"
+						onClick={toggleSideNav}
+						className="text-gray-400 hover:text-white focus:outline-none text-3xl mb-2"
 					>
 						☰
 					</button>
 				</div>
 			</div>
-			{isMobileMenuOpen && (
-				<div className="md:hidden">
-					<div className="flex flex-col items-center space-y-4 py-4">
+			{isSideNavOpen && (
+				<div
+					className={`absolute right-0 transition-opacity duration-300 overflow-hidden ${
+						isAnimatingOut ? "opacity-0" : "opacity-100"
+					}`}
+				>
+					<div
+						className={`w-auto bg-gray-900 p-4 z-10 transition-transform duration-300 ${
+							isAnimatingOut ? "side-nav-out" : "side-nav"
+						}`}
+					>
 						<NavLinks
 							session={session}
 							currentRoute={currentRoute}
