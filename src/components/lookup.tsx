@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { Chart } from "react-google-charts";
 
+// needed to construct the stock candles
 interface StockCandles {
 	s: string;
 	t: number[];
@@ -17,14 +18,17 @@ interface StockCandles {
 }
 
 export default function Lookup() {
-	const [symbol, setSymbol] = useState("");
-	const [data, setData] = useState<StockCandles | null>(null);
-	const [time, setTime] = useState("5D");
+	const [symbol, setSymbol] = useState(""); // stock symbol
+	const [data, setData] = useState<StockCandles | null>(null); // candle/chart data
+	const [time, setTime] = useState("5D"); // time period
 	const [isLoading, setIsLoading] = useState(false);
 
+	// handles submission of the text box
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
-		setIsLoading(true);
+		setIsLoading(true); // makes the loading symbol appear
+
+		// gets the beginning data based on the time using a map
 		const dateBegin = (() => {
 			const currentDate = new Date();
 			const timeMap: { [key: string]: () => Date } = {
@@ -50,8 +54,10 @@ export default function Lookup() {
 				.split("T")[0];
 		})();
 
+		// sets the end date to today
 		const dateEnd = new Date().toISOString().split("T")[0];
 		try {
+			// map for the resolutions of the data
 			const resolutions: { [key: string]: string } = {
 				"1D": "1",
 				"5D": "20",
@@ -62,7 +68,7 @@ export default function Lookup() {
 
 			const resolution = resolutions[time] || "H";
 			let data;
-			let dateBeginTemp = dateBegin;
+			let dateBeginTemp = dateBegin; // need to make a temp variable since the date may change if weekend etc
 
 			do {
 				const [candleData, stockData] = await Promise.all([
@@ -82,6 +88,7 @@ export default function Lookup() {
 				const curPrice = stockData.last;
 				data = { ...candleData, curPrice };
 
+				// if the data has returned no data, set the begin date to a day earlier and retry fetch
 				if (data.s === "no_data") {
 					dateBeginTemp = new Date(
 						new Date(dateBeginTemp).setDate(
@@ -101,6 +108,7 @@ export default function Lookup() {
 		}
 	};
 
+	// data for the chart
 	const chartData = [
 		["Date", "Low", "Open", "Close", "High"],
 		...(data && data.s == "ok"
@@ -116,6 +124,7 @@ export default function Lookup() {
 			: []),
 	];
 
+	// options for the candle chart
 	const options = {
 		title: "Stock Prices",
 		legend: "none",
@@ -126,6 +135,7 @@ export default function Lookup() {
 		backgroundColor: "#E5E7EB",
 	};
 
+	// defines the candlestick chart
 	const CandlestickChart = () => {
 		const minPrice = Math.min(...(data?.l || []));
 		const maxPrice = Math.max(...(data?.h || []));

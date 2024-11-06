@@ -3,9 +3,11 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+// default landing page if the user isn't authenticated
 export default function LandingPage() {
 	const router = useRouter();
 
+	// routes the user to the registration page
 	const handleRegister = () => {
 		router.push("/register");
 	};

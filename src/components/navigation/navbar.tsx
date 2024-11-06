@@ -7,12 +7,14 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Profile from "./profile";
 
+// provides navigation for the website, accounts for large and small screens
 export default function NavBar() {
 	const currentRoute = usePathname();
 	const { data: session } = useSession();
 	const [isSideNavOpen, setIsSideNavOpen] = useState(false);
 	const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
+	// allows the user to toggle the sidebar on and off on smaller screens
 	const toggleSideNav = () => {
 		if (isSideNavOpen) {
 			setIsAnimatingOut(true);
@@ -68,6 +70,7 @@ export default function NavBar() {
 	);
 }
 
+// provides all the nav links
 function NavLinks({
 	session,
 	currentRoute,
@@ -75,6 +78,7 @@ function NavLinks({
 	session: Session | null;
 	currentRoute: string;
 }) {
+	// current userId if is exists
 	const userId = session?.user?.id || "";
 
 	return (
