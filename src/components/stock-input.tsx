@@ -2,11 +2,13 @@ import { fetchData } from "@/util/fetch-data";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
+// stock data needed to get the net change
 interface StockData {
 	o: number;
 	curPrice: number;
 }
 
+// the only item I need from the api
 interface StockApiResponse {
 	last: number;
 }
@@ -18,6 +20,7 @@ export default function StockInput({ stockSymbol }: { stockSymbol: string }) {
 	const fetchStockPrice = useCallback(
 		async (date: string) => {
 			try {
+				// gets all the data needed to construct the component
 				const [stockData, response]: [StockData, StockApiResponse] =
 					await Promise.all([
 						fetchData(
@@ -40,15 +43,18 @@ export default function StockInput({ stockSymbol }: { stockSymbol: string }) {
 		[stockSymbol]
 	);
 
+	// updates the current stock price
 	useEffect(() => {
 		const today = new Date().toISOString().split("T")[0];
 		fetchStockPrice(today);
 	}, [fetchStockPrice]);
 
+	// returns loading
 	if (loading) {
 		return <p>Loading...</p>;
 	}
 
+	// stock does not exist
 	if (!data && !loading) {
 		return <p>Could not find stock data</p>;
 	}
@@ -60,8 +66,10 @@ export default function StockInput({ stockSymbol }: { stockSymbol: string }) {
 		openingPrice = curPrice;
 	}
 
+	// finds the change on the day
 	const dayChange = ((curPrice - openingPrice) / openingPrice) * 100;
 
+	// refreshed the price
 	const handleRefresh = () => {
 		const today = new Date().toISOString().split("T")[0];
 		fetchStockPrice(today);
