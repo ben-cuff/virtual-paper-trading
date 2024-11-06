@@ -1,10 +1,12 @@
 import { fetchData } from "@/util/fetch-data";
 
+// holds the user's data
 interface User {
 	name: string;
 	balance: number;
 }
 
+// data for a stock
 interface Stock {
 	stock_symbol: string;
 	shares_owned: number;
@@ -13,17 +15,21 @@ interface Stock {
 	total_change: number;
 }
 
+// needed to construct the portfolio
 interface PortfolioData {
 	user: User;
 	total_worth: number;
 	portfolio: Stock[];
 }
 
+// portfolio component
 export default async function Portfolio({ id }: { id: number }) {
+	// gets all the stocks in the user's portfolio and general information
 	const stockData: PortfolioData = await fetchData(
 		`${process.env.BASE_URL}/api/portfolio?id=${id}`
 	);
 
+	// gets current data for all stocks in te user's portfolio
 	const updatedPortfolio = await Promise.all(
 		stockData.portfolio.map(async (stock: Stock) => {
 			const currentPrice = await fetchData(
@@ -38,6 +44,7 @@ export default async function Portfolio({ id }: { id: number }) {
 
 	stockData.portfolio = updatedPortfolio;
 
+	// calculates the total net worth of the user's portfolio
 	const totalWorth =
 		stockData.user.balance +
 		stockData.portfolio.reduce(
@@ -48,6 +55,7 @@ export default async function Portfolio({ id }: { id: number }) {
 
 	stockData.total_worth = totalWorth;
 
+	// updates the leaderboard with the user's current networth
 	await fetch(`${process.env.BASE_URL}/api/leaderboard?id=${id}`, {
 		method: "POST",
 		headers: {
@@ -56,6 +64,7 @@ export default async function Portfolio({ id }: { id: number }) {
 		body: JSON.stringify({ total_worth: totalWorth }),
 	});
 
+	// gets the net change of each stock compared to the current price
 	stockData.portfolio = stockData.portfolio.map((stock: Stock) => ({
 		...stock,
 		total_change:
